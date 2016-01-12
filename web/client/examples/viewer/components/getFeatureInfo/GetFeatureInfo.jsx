@@ -108,7 +108,8 @@ var GetFeatureInfo = React.createClass({
                 const layerMetadata = {
                     title: layer.title
                 };
-                const url = layer.url.replace(/[?].*$/g, '');
+                // const url = layer.url.replace(/[?].*$/g, '');
+                const url = layer.url;
                 this.props.actions.getFeatureInfo(url, requestConf, layerMetadata);
             }
             this.props.actions.showMapinfoMarker();
