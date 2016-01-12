@@ -29,7 +29,7 @@ function startApp(plugins) {
     store.dispatch(changeBrowserProperties(ConfigUtils.getBrowserProperties()));
 
     ConfigUtils.loadConfiguration().then(() => {
-        const { configUrl, legacy } = ConfigUtils.getUserConfiguration('config', 'json');
+        const { configUrl, legacy } = ConfigUtils.getUserConfiguration('config_spazz', 'json');
         store.dispatch(loadMapConfig(configUrl, legacy));
 
         let locale = LocaleUtils.getUserLocale();
