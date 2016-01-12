@@ -24,7 +24,9 @@ var Legend = React.createClass({
                protocol: urlObj.protocol,
                pathname: urlObj.pathname,
                query: {
+                   map: urlObj.search ? urlObj.search.replace("?map=", "") : undefined,
                    service: "WMS",
+                   version: "1.1.1",
                    request: "GetLegendGraphic",
                    format: "image/png",
                    height: this.props.legendHeigth,
