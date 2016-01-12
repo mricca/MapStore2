@@ -25,10 +25,11 @@ function wmsToOpenlayersOptions(options) {
 }
 
 function getWMSURL( url ) {
-    return url.split("\?")[0];
+    // return url.split("\?")[0];
+    return url;
 }
 
-Layers.registerType('wms', {
+/*Layers.registerType('wms', {
     create: (options) => {
         return new ol.layer.Tile({
             opacity: options.opacity !== undefined ? options.opacity : 1,
@@ -37,6 +38,22 @@ Layers.registerType('wms', {
             source: new ol.source.TileWMS({
               url: getWMSURL(options.url),
               params: wmsToOpenlayersOptions(options)
+            })
+        });
+    }
+});*/
+
+// To prevent tiled problems with weather stations from mapserver
+Layers.registerType('wms', {
+    create: (options) => {
+        return new ol.layer.Image({
+            opacity: options.opacity !== undefined ? options.opacity : 1,
+            visible: options.visibility !== false,
+            zIndex: options.zIndex,
+            source: new ol.source.ImageWMS({
+              url: getWMSURL(options.url),
+              params: wmsToOpenlayersOptions(options),
+              serverType: /** @type {ol.source.wms.ServerType} */ ('mapserver')
             })
         });
     }

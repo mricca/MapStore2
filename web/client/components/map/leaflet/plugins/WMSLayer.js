@@ -23,7 +23,8 @@ function wmsToLeafletOptions(options) {
 }
 
 function getWMSURL( url ) {
-    return url.split("\?")[0];
+    // return url.split("\?")[0];
+    return url;
 }
 
 Layers.registerType('wms', (options) => {
