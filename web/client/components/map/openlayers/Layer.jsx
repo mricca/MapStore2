@@ -115,6 +115,26 @@ const OpenlayersLayer = React.createClass({
                         this.props.onLayerLoad(options.name);
                     }
                 });
+                this.layer.getSource().on('imageloadstart', () => {
+                    if (this.tilestoload === 0) {
+                        this.props.onLayerLoading(options.name);
+                        this.tilestoload++;
+                    } else {
+                        this.tilestoload++;
+                    }
+                });
+                this.layer.getSource().on('imageloadend', () => {
+                    this.tilestoload--;
+                    if (this.tilestoload === 0) {
+                        this.props.onLayerLoad(options.name);
+                    }
+                });
+                this.layer.getSource().on('imageloaderror', () => {
+                    this.tilestoload--;
+                    if (this.tilestoload === 0) {
+                        this.props.onLayerLoad(options.name);
+                    }
+                });
             }
         }
     }
