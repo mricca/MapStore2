@@ -17,6 +17,7 @@ var mapquestOsm = require('./images/mapthumbs/mapquest-osm.jpg');
 var empty = require('./images/mapthumbs/none.jpg');
 var unknown = require('./images/mapthumbs/dafault.jpg');
 var Night2012 = require('./images/mapthumbs/NASA_NIGHT.jpg');
+var AerialWithLabels = require('./images/mapthumbs/AerialWithLabels.jpg');
 require("./style.css");
 
 let thumbs = {
@@ -26,7 +27,8 @@ let thumbs = {
         TERRAIN
     },
     bing: {
-        Aerial
+        Aerial,
+        AerialWithLabels
     },
     osm: {
         mapnik
@@ -91,7 +93,7 @@ let BackgroundSwitcher = React.createClass({
     changeLayerVisibility(eventObj) {
         let position = parseInt(eventObj.currentTarget.dataset.position, 10);
         var layer = this.props.layers[position];
-        this.props.propertiesChangeHandler(layer.name, {visibility: true});
+        this.props.propertiesChangeHandler(layer.id, {visibility: true});
     }
 });
 

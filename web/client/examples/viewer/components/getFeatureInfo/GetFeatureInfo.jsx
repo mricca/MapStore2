@@ -106,12 +106,14 @@ var GetFeatureInfo = React.createClass({
             for (let l = 0; l < wmsVisibleLayers.length; l++) {
                 const layer = wmsVisibleLayers[l];
                 const requestConf = {
+                    id: layer.id,
                     layers: layer.name,
                     query_layers: layer.name,
-                    x: newProps.clickedMapPoint.pixel.x,
-                    y: newProps.clickedMapPoint.pixel.y,
-                    height: newProps.map.size.height,
-                    width: newProps.map.size.width,
+                    styles: layer.style,
+                    x: parseInt(newProps.clickedMapPoint.pixel.x, 10),
+                    y: parseInt(newProps.clickedMapPoint.pixel.y, 10),
+                    height: parseInt(newProps.map.size.height, 10),
+                    width: parseInt(newProps.map.size.width, 10),
                     srs: crs,
                     bbox: bounds.minx + "," +
                           bounds.miny + "," +
@@ -121,11 +123,12 @@ var GetFeatureInfo = React.createClass({
                     info_format: newProps.infoFormat
                 };
                 const layerMetadata = {
-                    title: layer.title
+                    title: layer.title,
+                    regex: layer.featureInfoRegex
                 };
                 // const url = layer.url.replace(/[?].*$/g, '');
                 const url = layer.url;
-                this.props.actions.getFeatureInfo(url, requestConf, layerMetadata);
+                this.props.actions.getFeatureInfo(url, requestConf, layerMetadata, layer.featureInfoParams);
             }
             this.props.actions.showMapinfoMarker();
         }
