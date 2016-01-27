@@ -12,6 +12,8 @@ var GetFeatureInfo = require("../components/getFeatureInfo/GetFeatureInfo");
 var ScaleBox = require("../../../components/ScaleBox/ScaleBox");
 var ZoomToMaxExtentButton = require('../../../components/buttons/ZoomToMaxExtentButton');
 var LayerTree = require('../components/LayerTree');
+// DateTimePicker
+var DateTimePicker = require('../components/DateTimePicker/DateTimePicker');
 var HistoryBar = require("../../../components/mapcontrols/navigationhistory/HistoryBar");
 var { ActionCreators } = require('redux-undo');
 var {undo, redo} = ActionCreators;
@@ -90,6 +92,14 @@ module.exports = {
                 changeHelpwinVisibility={props.changeHelpwinVisibility}
                 >
                 <SearchBar key="seachBar" onSearch={props.textSearch} onSearchReset={props.resultsPurge} />
+            </HelpWrapper>,
+            <HelpWrapper
+				key="DateTimePicker-help"
+				>
+                <DateTimePicker
+                    key="DateTimePicker"
+                    handleChange={props.handleChange}
+                    />
             </HelpWrapper>,
             <NominatimResultList key="nominatimresults" results={props.searchResults} onItemClick={(props.changeMapView)} afterItemClick={props.resultsPurge} mapConfig={props.map}/>,
             <MapToolBar
@@ -281,6 +291,7 @@ module.exports = {
     actions: {
         getFeatureInfo,
         textSearch,
+		DateTimePicker,
         resultsPurge,
         changeMapInfoState,
         purgeMapInfoResults,
