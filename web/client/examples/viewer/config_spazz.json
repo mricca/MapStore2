@@ -52,7 +52,7 @@
             "type": "wms",
             "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map",
             "group" : "SPAZIALIZZAZIONI",
-            "title" : "Pioggia",
+            "title" : "Pioggia Spazializzazioni 2016-01-02",
             "name" : "prec_sp_2016-01-02",
             "visibility" : false,
             "tiled": true
@@ -60,7 +60,7 @@
             "type": "wms",
             "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map",
             "group" : "SPAZIALIZZAZIONI",
-            "title" : "Temperatura",
+            "title" : "Temperatura Spazializzazioni 2016-01-02",
             "name" : "tmax_sp_2016-01-02",
             "visibility" : true,
             "tiled": true
@@ -84,7 +84,7 @@
             "type": "wms",
             "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map",
             "group" : "STAZIONI",
-            "title" : "Pioggia",
+            "title" : "Pioggia Stazioni 2016-01-02",
             "name" : "prec_2016-01-02",
             "visibility" : false,
             "tiled": true
@@ -92,7 +92,7 @@
             "type": "wms",
             "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map",
             "group" : "STAZIONI",
-            "title" : "Temperatura",
+            "title" : "Temperatura Stazioni 2016-01-02",
             "name" : "tmax_2016-01-02",
             "visibility" : true,
             "tiled": true

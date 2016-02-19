@@ -1,3 +1,5 @@
+var path = require("path");
+var NormalModuleReplacementPlugin = require("webpack/lib/NormalModuleReplacementPlugin");
 module.exports = function karmaConfig(config) {
     config.set({
 
@@ -38,10 +40,16 @@ module.exports = function karmaConfig(config) {
 
         webpack: {
             devtool: 'inline-source-map',
+            plugins: [
+                new NormalModuleReplacementPlugin(/babel-standalone$/, path.join(__dirname, "web", "client", "libs", "babel"))
+            ],
             module: {
                 loaders: [
                     { test: /\.jsx?$/, exclude: /(ol\.js$)/, loader: 'babel-loader', query: {stage: 0} },
                     { test: /\.css$/, loader: 'style!css'},
+                    { test: /\.less$/, loader: "style!css!less-loader" },
+                    { test: /\.woff(2)?(\?v=[0-9].[0-9].[0-9])?$/, loader: "url-loader?mimetype=application/font-woff" },
+                    { test: /\.(ttf|eot|svg)(\?v=[0-9].[0-9].[0-9])?$/, loader: "file-loader?name=[name].[ext]" },
                     { test: /\.(png|jpg|gif|svg)$/, loader: 'url-loader?name=[path][name].[ext]&limit=8192'} // inline base64 URLs for <=8k images, direct URLs for the rest
                 ],
                 postLoaders: [ ]

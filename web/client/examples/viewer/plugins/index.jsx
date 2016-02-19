@@ -12,8 +12,6 @@ var GetFeatureInfo = require("../components/getFeatureInfo/GetFeatureInfo");
 var ScaleBox = require("../../../components/ScaleBox/ScaleBox");
 var ZoomToMaxExtentButton = require('../../../components/buttons/ZoomToMaxExtentButton');
 var LayerTree = require('../components/LayerTree');
-// DateTimePicker
-var DateTimePicker = require('../components/DateTimePicker/DateTimePicker');
 var HistoryBar = require("../../../components/mapcontrols/navigationhistory/HistoryBar");
 var { ActionCreators } = require('redux-undo');
 var {undo, redo} = ActionCreators;
@@ -72,6 +70,9 @@ var GlobalSpinner = connect((state) => {
     };
 })(require('../../../components/spinners/GlobalSpinner/GlobalSpinner'));
 
+// DateTimePicker
+import ParentComponent from '../components/DateTimePicker/DateTimePicker';
+
 module.exports = {
     components: (props) => {
         return [
@@ -96,7 +97,7 @@ module.exports = {
             <HelpWrapper
 				key="DateTimePicker-help"
 				>
-                <DateTimePicker
+                <ParentComponent
                     key="DateTimePicker"
                     handleChange={props.handleChange}
                     />
@@ -291,7 +292,7 @@ module.exports = {
     actions: {
         getFeatureInfo,
         textSearch,
-		DateTimePicker,
+		ParentComponent,
         resultsPurge,
         changeMapInfoState,
         purgeMapInfoResults,

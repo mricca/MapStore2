@@ -4,7 +4,7 @@ import DateTimeField from "react-bootstrap-datetimepicker";
 
 require('./DateTimePicker.css');
 
-export default class ParentComponent extends Component {
+class ParentComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,3 +36,5 @@ export default class ParentComponent extends Component {
         return this.setState({date: newDate});
     }
 }
+
+export default ParentComponent;

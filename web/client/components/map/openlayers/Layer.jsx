@@ -79,6 +79,16 @@ const OpenlayersLayer = React.createClass({
     },
     setLayerVisibility(visibility) {
         var oldVisibility = this.props.options && this.props.options.visibility !== false;
+
+        if (this.layer) {
+            const newUrl1 = this.layer.getSource();
+            const newUrl2 = this.layer.getProperties();
+            const newUrl3 = newUrl1.getProperties();
+            if (newUrl2.title === "Temperatura Spazializzazioni 2016-01-02") {
+                newUrl1.setProperties({url: "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-12.map", title: "Temperatura Spazializzazioni 2016-01-12"});
+            }
+        }
+
         if (visibility !== oldVisibility && this.layer) {
             this.layer.setVisible(visibility);
         }

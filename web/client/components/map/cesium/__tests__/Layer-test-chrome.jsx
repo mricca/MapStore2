@@ -15,6 +15,9 @@ require('../../../../utils/cesium/Layers');
 require('../plugins/OSMLayer');
 require('../plugins/WMSLayer');
 require('../plugins/BingLayer');
+require('../plugins/GraticuleLayer');
+require('../plugins/OverlayLayer');
+require('../plugins/MarkerLayer');
 
 window.CESIUM_BASE_URL = "web/client/libs/Cesium/Build/Cesium";
 
@@ -129,6 +132,28 @@ describe('Cesium layer', () => {
 
         expect(layer).toExist();
         expect(map.imageryLayers.length).toBe(1);
+        expect(map.imageryLayers._layers[0]._imageryProvider._url).toBe('{s}');
+        expect(map.imageryLayers._layers[0]._imageryProvider._tileProvider._subdomains.length).toBe(1);
+    });
+
+    it('creates a wms layer with multiple urls for CesiumLayer map', () => {
+        var options = {
+            "type": "wms",
+            "visibility": true,
+            "name": "nurc:Arc_Sample",
+            "group": "Meteo",
+            "format": "image/png",
+            "url": ["http://demo.geo-solutions.it/geoserver/wms", "http://demo.geo-solutions.it/geoserver/wms"]
+        };
+        // create layers
+        var layer = ReactDOM.render(
+            <CesiumLayer type="wms"
+                 options={options} map={map}/>, document.getElementById("container"));
+
+        expect(layer).toExist();
+        expect(map.imageryLayers.length).toBe(1);
+        expect(map.imageryLayers._layers[0]._imageryProvider._url).toBe('{s}');
+        expect(map.imageryLayers._layers[0]._imageryProvider._tileProvider._subdomains.length).toBe(2);
     });
 
     it('creates a bing layer for leaflet map', () => {
@@ -186,7 +211,7 @@ describe('Cesium layer', () => {
         expect(layer.provider.alpha).toBe(0.5);
     });
 
-    it('respects layer ordering', () => {
+    it('respects layer ordering 1', () => {
         var options1 = {
             "type": "wms",
             "visibility": true,
@@ -228,5 +253,133 @@ describe('Cesium layer', () => {
 
         expect(map.imageryLayers.get(0)).toBe(layer2.provider);
         expect(map.imageryLayers.get(1)).toBe(layer1.provider);
+    });
+
+    it('creates a graticule layer for cesium map', () => {
+        var options = {
+            "visibility": true
+        };
+        // create layers
+        var layer = ReactDOM.render(
+            <CesiumLayer type="graticule"
+                 options={options} map={map}/>, document.getElementById("container"));
+
+
+        expect(layer).toExist();
+        expect(map.imageryLayers.length).toBe(1);
+    });
+
+    it('creates and overlay layer for cesium map', () => {
+        let container = document.createElement('div');
+        container.id = 'ovcontainer';
+        document.body.appendChild(container);
+
+        let element = document.createElement('div');
+        element.id = 'overlay-1';
+        document.body.appendChild(element);
+
+        let options = {
+            id: 'overlay-1',
+            position: [13, 43]
+        };
+        // create layers
+        let layer = ReactDOM.render(
+            <CesiumLayer type="overlay"
+                 options={options} map={map}/>, document.getElementById('ovcontainer'));
+
+        expect(layer).toExist();
+        expect(map.scene.primitives.length).toBe(1);
+    });
+
+    it('creates and overlay layer for cesium map with close support', () => {
+        let container = document.createElement('div');
+        container.id = 'ovcontainer';
+        document.body.appendChild(container);
+
+        let element = document.createElement('div');
+        element.id = 'overlay-1';
+        let closeElement = document.createElement('div');
+        closeElement.className = 'close';
+        element.appendChild(closeElement);
+        document.body.appendChild(element);
+        let closed = false;
+        let options = {
+            id: 'overlay-1',
+            position: [13, 43],
+            onClose: () => {
+                closed = true;
+            }
+        };
+        // create layers
+        let layer = ReactDOM.render(
+            <CesiumLayer type="overlay"
+                 options={options} map={map}/>, document.getElementById('ovcontainer'));
+
+        expect(layer).toExist();
+        const content = map.scene.primitives.get(0)._content;
+        expect(content).toExist();
+        const close = content.getElementsByClassName('close')[0];
+        close.click();
+        expect(closed).toBe(true);
+    });
+
+    it('creates and overlay layer for cesium map with no data-reactid attributes', () => {
+        let container = document.createElement('div');
+        container.id = 'ovcontainer';
+        document.body.appendChild(container);
+
+        let element = document.createElement('div');
+        element.id = 'overlay-1';
+        let closeElement = document.createElement('div');
+        closeElement.className = 'close';
+        element.appendChild(closeElement);
+        document.body.appendChild(element);
+        let options = {
+            id: 'overlay-1',
+            position: [13, 43]
+        };
+        // create layers
+        let layer = ReactDOM.render(
+            <CesiumLayer type="overlay"
+                 options={options} map={map}/>, document.getElementById('ovcontainer'));
+
+        expect(layer).toExist();
+        const content = map.scene.primitives.get(0)._content;
+        expect(content).toExist();
+        const close = content.getElementsByClassName('close')[0];
+        expect(close.getAttribute('data-reactid')).toNotExist();
+    });
+
+    it('creates a marker layer for cesium map', () => {
+        let options = {
+            point: [13, 43]
+        };
+        // create layers
+        let layer = ReactDOM.render(
+            <CesiumLayer type="marker"
+                 options={options} map={map}/>, document.getElementById('container'));
+        expect(layer).toExist();
+        expect(map.entities._entities.length).toBe(1);
+    });
+
+    it('respects layer ordering 2', () => {
+        var options = {
+            "type": "wms",
+            "visibility": true,
+            "name": "nurc:Arc_Sample",
+            "group": "Meteo",
+            "format": "image/png",
+            "opacity": 1.0,
+            "url": "http://demo.geo-solutions.it/geoserver/wms"
+        };
+        // create layers
+        var layer = ReactDOM.render(
+            <CesiumLayer type="wms" position={10}
+                 options={options} map={map}/>, document.getElementById("container"));
+
+        expect(layer).toExist();
+
+        const position = map.imageryLayers.get(0)._position;
+        expect(position).toBe(10);
     });
 });

@@ -14,14 +14,14 @@ var Layers = {
         layerTypes[type] = impl;
     },
 
-    createLayer: function(type, options) {
+    createLayer: function(type, options, map) {
         var layerCreator = layerTypes[type];
         if (layerCreator && layerCreator.create) {
-            return layerCreator.create(options);
+            return layerCreator.create(options, map);
         } else if (layerCreator) {
             // TODO this compatibility workaround should be removed
             // using the same interface
-            return layerCreator(options);
+            return layerCreator(options, map);
         }
         return null;
     },
@@ -32,10 +32,10 @@ var Layers = {
         }
         return null;
     },
-    updateLayer: function(type, layer, newOptions, oldOptions) {
+    updateLayer: function(type, layer, newOptions, oldOptions, map) {
         var layerCreator = layerTypes[type];
         if (layerCreator && layerCreator.update) {
-            return layerCreator.update(layer, newOptions, oldOptions);
+            return layerCreator.update(layer, newOptions, oldOptions, map);
         }
 
     }
