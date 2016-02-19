@@ -47,6 +47,7 @@ function getWMSURL( url ) {
 Layers.registerType('wms', {
     create: (options) => {
         return new ol.layer.Image({
+            title: options.title,
             opacity: options.opacity !== undefined ? options.opacity : 1,
             visible: options.visibility !== false,
             zIndex: options.zIndex,
