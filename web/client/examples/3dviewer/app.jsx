@@ -16,7 +16,7 @@ const LocaleUtils = require('../../utils/LocaleUtils');
 var store = require('./stores/store');
 
 ConfigUtils.loadConfiguration().then(() => {
-    const { configUrl, legacy } = ConfigUtils.getUserConfiguration('config', 'json');
+    const { configUrl, legacy } = ConfigUtils.getUserConfiguration('config_spazz', 'json');
     store.dispatch(loadMapConfig(configUrl, legacy));
 
     let locale = LocaleUtils.getUserLocale();

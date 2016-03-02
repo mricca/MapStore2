@@ -13,7 +13,8 @@ var WMSUtils = {
         }, options.params || {});
     },
     getWMSURL: function( url ) {
-        return url.split("\?")[0];
+        // return url.split("\?")[0];
+        return url;
     }
 };
 

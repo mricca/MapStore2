@@ -43,14 +43,17 @@ const OpenlayersLayer = React.createClass({
             this.layer.setZIndex(newProps.position);
         }
         if (this.props.options && this.props.options.params && this.layer.getSource() && this.layer.getSource().updateParams) {
-            const changed = Object.keys(this.props.options.params).reduce((found, param) => {
+            const changed = Object.keys(newProps.options.params).reduce((found, param) => {
                 if (newProps.options.params[param] !== this.props.options.params[param]) {
                     return true;
                 }
                 return found;
             }, false);
             if (changed) {
-                this.layer.getSource().updateParams(newProps.options.params);
+                const source = this.layer.getSource();
+                source.setUrl(newProps.options.url);
+                source.updateParams(newProps.options.params);
+                source.updateParams(newProps.options);
             }
         }
     },
@@ -79,16 +82,6 @@ const OpenlayersLayer = React.createClass({
     },
     setLayerVisibility(visibility) {
         var oldVisibility = this.props.options && this.props.options.visibility !== false;
-
-        if (this.layer) {
-            const newUrl1 = this.layer.getSource();
-            const newUrl2 = this.layer.getProperties();
-            const newUrl3 = newUrl1.getProperties();
-            if (newUrl2.title === "Temperatura Spazializzazioni 2016-01-02") {
-                newUrl1.setProperties({url: "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-12.map", title: "Temperatura Spazializzazioni 2016-01-12"});
-            }
-        }
-
         if (visibility !== oldVisibility && this.layer) {
             this.layer.setVisible(visibility);
         }
@@ -127,7 +120,7 @@ const OpenlayersLayer = React.createClass({
                 });
                 this.layer.getSource().on('imageloadstart', () => {
                     if (this.tilestoload === 0) {
-                        this.props.onLayerLoading(options.name);
+                        this.props.onLayerLoading(options.id);
                         this.tilestoload++;
                     } else {
                         this.tilestoload++;
@@ -136,13 +129,13 @@ const OpenlayersLayer = React.createClass({
                 this.layer.getSource().on('imageloadend', () => {
                     this.tilestoload--;
                     if (this.tilestoload === 0) {
-                        this.props.onLayerLoad(options.name);
+                        this.props.onLayerLoad(options.id);
                     }
                 });
                 this.layer.getSource().on('imageloaderror', () => {
                     this.tilestoload--;
                     if (this.tilestoload === 0) {
-                        this.props.onLayerLoad(options.name);
+                        this.props.onLayerLoad(options.id);
                     }
                 });
             }

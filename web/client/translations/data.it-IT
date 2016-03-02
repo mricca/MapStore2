@@ -70,6 +70,7 @@
             "tooltip": "Scegli lo sfondo"
         },
         "getFeatureInfoTitle": "Informazioni Sulle Feature",
+        "DateChooserTitle": "Seleziona la data",
         "getFeatureInfoError": {
             "title": "Ooops! Qualcosa non va",
             "text": "Si è verificato un errore nel fare questa richiesta <b>GetFeatureInfo</b>"

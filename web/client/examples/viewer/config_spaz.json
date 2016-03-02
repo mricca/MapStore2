@@ -1,0 +1,172 @@
+{
+    "map" : {
+        "mapOptions":{
+          "maxExtent": [
+            -20037508.34, -20037508.34,
+            20037508.34, 20037508.34
+          ],
+          "tiled": true
+        },
+        "projection": "EPSG:3857",
+        "units" : "m",
+        "center": {"x": 1250000.000000, "y": 5370000.000000, "crs": "EPSG:3857"},
+        "maxExtent": [
+          -20037508.34, -20037508.34,
+          20037508.34, 20037508.34
+        ],
+        "zoom":8,
+        "layers" : [
+          {
+    				"type": "osm",
+    				"title": "Open Street Map",
+    				"name": "mapnik",
+            "source": "osm",
+    				"group": "background",
+            "visibility": true
+    			},
+          {
+            "type": "google",
+            "title": "Google HYBRID",
+            "name": "HYBRID",
+            "source": "google",
+            "group": "background",
+            "visibility": false
+          },
+          {
+            "type": "mapquest",
+            "title": "MapQuest OSM",
+            "name": "osm",
+            "source": "mapquest",
+            "group": "background",
+            "visibility": false
+          },
+          {
+            "type": "bing",
+            "title": "Bing Aerial",
+            "apiKey": "AqTGBsziZHIJYYxgivLBf0hVdrAk9mWO5cQcb8Yux8sW5M8c8opEC2lZqKR1ZZXf",
+            "name": "Aerial",
+            "source": "bing",
+            "group": "background",
+            "visibility": false
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Aree Allerta",
+            "title" : "Prec Max YYYY-MM-DD",
+            "name" : "Aree_Allerta_Massimo_YYYY-MM-DD",
+            "params": {},
+            "visibility" : false,
+            "tiled": true,
+            "singleTile": true
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Aree Allerta",
+            "title" : "Prec Avg YYYY-MM-DD",
+            "name" : "Aree_Allerta_Media_YYYY-MM-DD",
+            "params": {},
+            "visibility" : false,
+            "tiled": true,
+            "singleTile": true
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Spazializzazioni",
+            "title" : "Prec Spaz. YYYY-MM-DD",
+            "params": {},
+            "name" : "prec_sp_YYYY-MM-DD",
+            "visibility" : true,
+            "tiled": true,
+            "singleTile": false
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Spazializzazioni",
+            "title" : "Temp Max Spaz. YYYY-MM-DD",
+            "params": {},
+            "name" : "tmax_sp_YYYY-MM-DD",
+            "visibility" : false,
+            "tiled": true,
+            "singleTile": false
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Spazializzazioni",
+            "title" : "Temp Min Spaz. YYYY-MM-DD",
+            "params": {},
+            "name" : "tmin_sp_YYYY-MM-DD",
+            "visibility" : false,
+            "tiled": true,
+            "singleTile": false
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Spazializzazioni",
+            "title" : "Vven Spaz. YYYY-MM-DD",
+            "params": {},
+            "name" : "vven_sp_YYYY-MM-DD",
+            "visibility" : false,
+            "tiled": true,
+            "singleTile": false
+          },{
+            "type" : "wms",
+            "url" : "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsambamm&",
+            "group" : "Ambiti amministrativi",
+            "title" : "Province",
+            "name" : "rt_ambamm.idprovince.rt.poly",
+            "visibility" : true,
+            "tiled" : true,
+            "singleTile": true
+          }, {
+            "type" : "wms",
+            "url" : "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsambamm&",
+            "group" : "Ambiti amministrativi",
+            "title" : "Comuni",
+            "name" : "rt_ambamm.idcomuni.rt.poly",
+            "visibility" : false,
+            "tiled" : true,
+            "singleTile": true
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Stazioni",
+            "title" : "Prec YYYY-MM-DD",
+            "params": {},
+            "name" : "prec_YYYY-MM-DD",
+            "visibility" : true,
+            "tiled": true,
+            "singleTile": true
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Stazioni",
+            "title" : "Temp Max YYYY-MM-DD",
+            "params": {},
+            "name" : "tmax_YYYY-MM-DD",
+            "visibility" : false,
+            "tiled": true,
+            "singleTile": true
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Stazioni",
+            "title" : "Temp Min YYYY-MM-DD",
+            "params": {},
+            "name" : "tmin_YYYY-MM-DD",
+            "visibility" : false,
+            "tiled": true,
+            "singleTile": true
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_YYYY-MM-DD.map&",
+            "group" : "Stazioni",
+            "title" : "Vven YYYY-MM-DD",
+            "params": {},
+            "name" : "vven_YYYY-MM-DD",
+            "visibility" : false,
+            "tiled": true,
+            "singleTile": true
+          }
+        ]
+    }
+}

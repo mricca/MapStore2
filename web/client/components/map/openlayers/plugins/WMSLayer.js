@@ -26,11 +26,26 @@ function wmsToOpenlayersOptions(options) {
 }
 
 function getWMSURLs( urls ) {
-    return urls.map((url) => url.split("\?")[0]);
+    // const myUrls = urls.map((url) => url.split("\?")[0]);
+    const myUrls = urls.map((url) => url);
+    return myUrls;
 }
 
-/*Layers.registerType('wms', {
+Layers.registerType('wms', {
     create: (options) => {
+        if (options.singleTile) {
+            return new ol.layer.Image({
+                title: options.title,
+                opacity: options.opacity !== undefined ? options.opacity : 1,
+                visible: options.visibility !== false,
+                zIndex: options.zIndex,
+                source: new ol.source.ImageWMS({
+                  url: getWMSURLs(isArray(options.url) ? options.url : [options.url]),
+                  params: wmsToOpenlayersOptions(options),
+                  serverType: /** @type {ol.source.wms.ServerType} */ ('mapserver')
+                })
+            });
+        }
         return new ol.layer.Tile({
             opacity: options.opacity !== undefined ? options.opacity : 1,
             visible: options.visibility !== false,
@@ -38,23 +53,6 @@ function getWMSURLs( urls ) {
             source: new ol.source.TileWMS({
               urls: getWMSURLs(isArray(options.url) ? options.url : [options.url]),
               params: wmsToOpenlayersOptions(options)
-            })
-        });
-    }
-});*/
-
-// To prevent tiled problems with weather stations from mapserver
-Layers.registerType('wms', {
-    create: (options) => {
-        return new ol.layer.Image({
-            title: options.title,
-            opacity: options.opacity !== undefined ? options.opacity : 1,
-            visible: options.visibility !== false,
-            zIndex: options.zIndex,
-            source: new ol.source.ImageWMS({
-              url: getWMSURL(options.url),
-              params: wmsToOpenlayersOptions(options),
-              serverType: /** @type {ol.source.wms.ServerType} */ ('mapserver')
             })
         });
     }

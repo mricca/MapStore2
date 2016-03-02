@@ -186,6 +186,7 @@
                 }
             }
         },
+    "DateChooserTitle": "Choose the date",
     "locate": {
         "tooltip": "Locate me",
         "metersUnit": "meters",

@@ -21,7 +21,8 @@ var Legend = React.createClass({
            let layer = this.props.layer;
            const url = isArray(layer.url) ?
                layer.url[Math.floor(Math.random() * layer.url.length)] :
-               layer.url.replace(/[?].*$/g, '');
+               layer.url.replace(/&/g, '');
+               // layer.url.replace(/[?].*$/g, '');
 
            let urlObj = urlUtil.parse(url);
            let legendUrl = urlUtil.format({

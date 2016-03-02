@@ -29,7 +29,7 @@ function startApp(plugins) {
     store.dispatch(changeBrowserProperties(ConfigUtils.getBrowserProperties()));
 
     ConfigUtils.loadConfiguration().then(() => {
-        const { configUrl, legacy } = ConfigUtils.getUserConfiguration('config_spazz', 'json');
+        const { configUrl, legacy } = ConfigUtils.getUserConfiguration('config_spaz', 'json');
         store.dispatch(loadMapConfig(configUrl, legacy));
 
         let locale = LocaleUtils.getUserLocale();
@@ -41,7 +41,7 @@ function startApp(plugins) {
         <Provider store={store}>
             <div className="fill">
                 <Viewer plugins={plugins.components} mapParams={{
-                    overview: true,
+                    overview: false,
                     scaleBar: true,
                     zoomControl: true
                 }}/>

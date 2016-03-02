@@ -45,6 +45,7 @@ var HelpWrapper = require('../../../components/Help/HelpWrapper');
 var HelpTextPanel = require('../../../components/Help/HelpTextPanel');
 var HelpBadge = require('../../../components/Help/HelpBadge');
 var HelpToggleBtn = require('../../../components/Help/HelpToggleBtn');
+var DateChooser = require('../components/DateChooser');
 
 var React = require('react');
 
@@ -70,9 +71,6 @@ var GlobalSpinner = connect((state) => {
     };
 })(require('../../../components/spinners/GlobalSpinner/GlobalSpinner'));
 
-// DateTimePicker
-import ParentComponent from '../components/DateTimePicker/DateTimePicker';
-
 module.exports = {
     components: (props) => {
         return [
@@ -94,17 +92,18 @@ module.exports = {
                 >
                 <SearchBar key="seachBar" onSearch={props.textSearch} onSearchReset={props.resultsPurge} />
             </HelpWrapper>,
-            <HelpWrapper
-				key="DateTimePicker-help"
-				>
-                <ParentComponent
-                    key="DateTimePicker"
-                    handleChange={props.handleChange}
-                    />
-            </HelpWrapper>,
             <NominatimResultList key="nominatimresults" results={props.searchResults} onItemClick={(props.changeMapView)} afterItemClick={props.resultsPurge} mapConfig={props.map}/>,
+            <DateChooser
+                    key="dateChooser"
+                    isPanel={true}
+                    buttonTooltip={<Message msgId="layers"/>}
+                    title={<Message msgId="layers"/>}
+                    groups={props.layers.groups}
+                    checkDate={props.map.date}
+                    layers={props.layers.flat.filter((layer) => layer.group !== "background")}
+                    propertiesChangeHandler={props.changeLayerProperties}/>,
             <MapToolBar
-                activeKey={props.floatingPanel.activeKey}
+                activeKey={props.floatingPanel.activeKey === "" ? "layerSwitcher" : props.floatingPanel.activeKey}
                 onActivateItem={props.activatePanel}
                 key="mapToolbar"
                 helpEnabled={props.help.enabled}
@@ -292,7 +291,6 @@ module.exports = {
     actions: {
         getFeatureInfo,
         textSearch,
-		ParentComponent,
         resultsPurge,
         changeMapInfoState,
         purgeMapInfoResults,

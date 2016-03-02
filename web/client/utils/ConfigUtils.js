@@ -67,14 +67,16 @@ var ConfigUtils = {
         }
         return {y: xy.y, x: xy.x, crs: "EPSG:4326"};
     },
-    normalizeConfig: function(config) {
+    normalizeConfig: function(config, dateConfig) {
         const {layers, groups, plugins, ...other} = config;
         other.center = ConfigUtils.getCenter(other.center);
+        other.date = dateConfig;
         return {
             map: other,
             layers: layers.map(ConfigUtils.setBingKey).map(ConfigUtils.setLayerId),
             groups: groups,
-            plugins: plugins
+            plugins: plugins,
+            dateConfig: dateConfig
         };
     },
     getUserConfiguration: function(defaultName, extension, geoStoreBase) {

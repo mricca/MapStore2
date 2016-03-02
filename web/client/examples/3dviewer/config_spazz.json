@@ -50,52 +50,76 @@
             "visibility": false
           },{
             "type": "wms",
-            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map&",
+            "group" : "AREE ALLERTA",
+            "title" : "Aree allerta Max 2016-01-02",
+            "name" : "Aree_Allerta_Massimo_2016-01-02",
+            "visibility" : false,
+            "tiled": true,
+            "singleTile": true
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map&",
+            "group" : "AREE ALLERTA",
+            "title" : "Aree allerta Avg 2016-01-02",
+            "name" : "Aree_Allerta_Media_2016-01-02",
+            "visibility" : true,
+            "tiled": true,
+            "singleTile": true
+          },{
+            "type": "wms",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map&",
             "group" : "SPAZIALIZZAZIONI",
             "title" : "Pioggia Spazializzazioni 2016-01-02",
             "name" : "prec_sp_2016-01-02",
             "visibility" : false,
-            "tiled": true
+            "tiled": true,
+            "singleTile": false
           },{
             "type": "wms",
-            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map&",
             "group" : "SPAZIALIZZAZIONI",
             "title" : "Temperatura Spazializzazioni 2016-01-02",
             "name" : "tmax_sp_2016-01-02",
             "visibility" : true,
-            "tiled": true
+            "tiled": true,
+            "singleTile": false
           }, {
             "type" : "wms",
-            "url" : "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsambamm",
+            "url" : "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsambamm&",
             "group" : "Ambiti amministrativi",
             "title" : "Province",
             "name" : "rt_ambamm.idprovince.rt.poly",
             "visibility" : true,
-            "tiled" : true
+            "tiled" : true,
+            "singleTile": true
           }, {
             "type" : "wms",
-            "url" : "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsambamm",
+            "url" : "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsambamm&",
             "group" : "Ambiti amministrativi",
             "title" : "Comuni",
             "name" : "rt_ambamm.idcomuni.rt.poly",
             "visibility" : false,
-            "tiled" : true
+            "tiled" : true,
+            "singleTile": true
           },{
             "type": "wms",
-            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map&",
             "group" : "STAZIONI",
             "title" : "Pioggia Stazioni 2016-01-02",
             "name" : "prec_2016-01-02",
             "visibility" : false,
-            "tiled": true
+            "tiled": true,
+            "singleTile": true
           },{
             "type": "wms",
-            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map",
+            "url" : "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_2016-01-02.map&",
             "group" : "STAZIONI",
             "title" : "Temperatura Stazioni 2016-01-02",
             "name" : "tmax_2016-01-02",
             "visibility" : true,
-            "tiled": true
+            "tiled": true,
+            "singleTile": true
           }
         ]
     }

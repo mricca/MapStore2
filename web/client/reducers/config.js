@@ -13,7 +13,7 @@ var ConfigUtils = require('../utils/ConfigUtils');
 function mapConfig(state = null, action) {
     switch (action.type) {
         case MAP_CONFIG_LOADED:
-            return action.legacy ? ConfigUtils.convertFromLegacy(action.config) : ConfigUtils.normalizeConfig(action.config.map);
+            return action.legacy ? ConfigUtils.convertFromLegacy(action.config) : ConfigUtils.normalizeConfig(action.config.map, action.checkDate.date);
         case MAP_CONFIG_LOAD_ERROR:
             return {
                 loadingError: action.error

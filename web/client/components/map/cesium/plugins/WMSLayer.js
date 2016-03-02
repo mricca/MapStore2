@@ -13,7 +13,8 @@ var assign = require('object-assign');
 var {isObject, isArray} = require('lodash');
 
 function getWMSURLs( urls ) {
-    return urls.map((url) => url.split("\?")[0]);
+    // return urls.map((url) => url.split("\?")[0]);
+    return urls.map((url) => url);
 }
 
 
