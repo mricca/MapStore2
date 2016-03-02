@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>MapStore 2 HomePage</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" href="http://css-spinners.com/css/spinner/spinner.css" type="text/css">
         <link rel="shortcut icon" href="examples/home/img/favicon.ico" type="image/x-icon">
 
         <style>
@@ -77,6 +76,57 @@
             text-shadow: black 0px 0px 6px,black 0px 0px 3px;
         }
 
+        @keyframes spin {
+            to { transform: rotate(1turn); }
+        }
+
+        .spinner-loader {
+            position: relative;
+            display: inline-block;
+            width: 5em;
+            height: 5em;
+            margin: 0 .5em;
+            font-size: 12px;
+            text-indent: 999em;
+            overflow: hidden;
+            animation: spin 1s infinite steps(8);
+            font-size: 24px;
+        }
+
+        .spinner-loader:before,
+        .spinner-loader:after,
+        .spinner-loader > div:before,
+        .spinner-loader > div:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 2.25em; /* (container width - part width)/2  */
+            width: .5em;
+            height: 1.5em;
+            border-radius: .2em;
+            background: #eee;
+            box-shadow: 0 3.5em #eee; /* container height - part height */
+            transform-origin: 50% 2.5em; /* container height / 2 */
+        }
+
+        .spinner-loader:before {
+            background: #555;
+        }
+
+        .spinner-loader:after {
+            transform: rotate(-45deg);
+            background: #777;
+        }
+
+        .spinner-loader > div:before {
+            transform: rotate(-90deg);
+            background: #999;
+        }
+
+        .spinner-loader > div:after {
+            transform: rotate(-135deg);
+            background: #bbb;
+        }
 
 
         </style>
@@ -84,7 +134,6 @@
     <body>
         <a href="https://github.com/geosolutions-it/MapStore2"><img style="position: absolute; top: 0; right: 0; border: 0; z-index:100; " src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
         <div id="container"></div>
-        <script src="dist/mapstore-commons.js"></script>
         <script src="dist/home.js"></script>
     </body>
 

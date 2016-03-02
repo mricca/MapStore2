@@ -48,6 +48,29 @@ NoProxy.prototype.getURL = function(resource) {
     return url + queryString;
 };
 
+function getQueryString(parameters) {
+    return Object.keys(parameters).map((key) => key + '=' + encodeURIComponent(parameters[key])).join('&');
+}
+
+function wmsToCesiumOptionsSingleTile(options) {
+    const opacity = options.opacity !== undefined ? options.opacity : 1;
+    const parameters = assign({
+        styles: options.style || "",
+        format: options.format || 'image/png',
+        transparent: options.transparent !== undefined ? options.transparent : true,
+        opacity: opacity,
+        layers: options.name,
+        width: options.size || 2000,
+        height: options.size || 2000,
+        bbox: "-180.0,-90,180.0,90",
+        srs: "EPSG:4326"
+    }, options.params || {});
+
+    return {
+        url: options.url + '?service=WMS&version=1.1.0&request=GetMap&' + getQueryString(parameters)
+    };
+}
+
 function wmsToCesiumOptions(options) {
     var opacity = options.opacity !== undefined ? options.opacity : 1;
     let proxyUrl = ConfigUtils.getProxyUrl({});
@@ -82,7 +105,13 @@ function wmsToCesiumOptions(options) {
 }
 
 const createLayer = (options) => {
-    let layer = new Cesium.WebMapServiceImageryProvider(wmsToCesiumOptions(options));
+    let layer;
+    if (options.singleTile) {
+        layer = new Cesium.SingleTileImageryProvider(wmsToCesiumOptionsSingleTile(options));
+    } else {
+        layer = new Cesium.WebMapServiceImageryProvider(wmsToCesiumOptions(options));
+    }
+
     layer.updateParams = (params) => {
         const newOptions = assign({}, options, {
             params: assign({}, options.params || {}, params)

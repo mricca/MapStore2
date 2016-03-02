@@ -7,15 +7,15 @@ var CRSSelector = require("../../../components/mapcontrols/mouseposition/CRSSele
 var ToggleButton = require('../../../components/buttons/ToggleButton');
 var MousePosition = require("../../../components/mapcontrols/mouseposition/MousePosition");
 var FeatureInfoFormatSelector = require("../../../components/misc/FeatureInfoFormatSelector");
-var MeasureComponent = require("../../../components/MeasureComponent/MeasureComponent");
+var MeasureComponent = require("../../../components/mapcontrols/measure/MeasureComponent");
 var GetFeatureInfo = require("../components/getFeatureInfo/GetFeatureInfo");
-var ScaleBox = require("../../../components/ScaleBox/ScaleBox");
+var ScaleBox = require("../../../components/mapcontrols/scale/ScaleBox");
 var ZoomToMaxExtentButton = require('../../../components/buttons/ZoomToMaxExtentButton');
 var LayerTree = require('../components/LayerTree');
 var HistoryBar = require("../../../components/mapcontrols/navigationhistory/HistoryBar");
 var { ActionCreators } = require('redux-undo');
 var {undo, redo} = ActionCreators;
-var BackgroundSwitcher = require("../../../components/BackgroundSwitcher/BackgroundSwitcher");
+var BackgroundSwitcher = require("../../../components/TOC/background/BackgroundSwitcher");
 var mapInfo = require('../../../reducers/mapInfo');
 var floatingPanel = require('../reducers/floatingPanel');
 var mousePosition = require('../../../reducers/mousePosition');
@@ -23,12 +23,12 @@ var measurement = require('../../../reducers/measurement');
 var {searchResults} = require('../../../reducers/search');
 var help = require('../../../reducers/help');
 
-var LocateBtn = require("../../../components/mapcontrols/Locate/LocateBtn");
+var LocateBtn = require("../../../components/mapcontrols/locate/LocateBtn");
 var locate = require('../../../reducers/locate');
 var {changeLocateState} = require('../../../actions/locate');
 // search SearchBar
-var SearchBar = require("../../../components/Search/SearchBar");
-var NominatimResultList = require("../../../components/Search/geocoding/NominatimResultList");
+var SearchBar = require("../../../components/mapcontrols/search/SearchBar");
+var NominatimResultList = require("../../../components/mapcontrols/search/geocoding/NominatimResultList");
 
 var {getFeatureInfo, changeMapInfoState, purgeMapInfoResults, changeMapInfoFormat, showMapinfoMarker, hideMapinfoMarker} = require('../../../actions/mapInfo');
 var {activatePanel} = require('../actions/floatingPanel');
@@ -46,6 +46,7 @@ var HelpTextPanel = require('../../../components/Help/HelpTextPanel');
 var HelpBadge = require('../../../components/Help/HelpBadge');
 var HelpToggleBtn = require('../../../components/Help/HelpToggleBtn');
 var DateChooser = require('../components/DateChooser');
+var MadeWithLove = require('../img/mwlii.png');
 
 var React = require('react');
 
@@ -69,7 +70,7 @@ var GlobalSpinner = connect((state) => {
     return {
         loading: state.layers.flat.some((layer) => layer.loading)
     };
-})(require('../../../components/spinners/GlobalSpinner/GlobalSpinner'));
+})(require('../../../components/misc/spinners/GlobalSpinner/GlobalSpinner'));
 
 module.exports = {
     components: (props) => {
@@ -276,7 +277,16 @@ module.exports = {
             <HelpTextPanel
                 key="helpTextPanel"
                 isVisible={props.help.helpwinViz}
-                helpText={props.help.helpText}/>
+                helpText={props.help.helpText}/>,
+                <div style={{
+                        position: "absolute",
+                        bottom: "50px",
+                        left: "0",
+                        height: 0,
+                        width: "100%",
+                        overflow: "visible",
+                        textAlign: "center"
+                    }} ><img src={MadeWithLove} /></div>
         ];
     },
     reducers: {

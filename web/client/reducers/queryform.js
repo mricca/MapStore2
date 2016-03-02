@@ -14,12 +14,27 @@ const {
     ADD_GROUP_FIELD,
     UPDATE_LOGIC_COMBO,
     REMOVE_GROUP_FIELD,
-    CHANGE_CASCADING_VALUE
+    CHANGE_CASCADING_VALUE,
+    EXPAND_ATTRIBUTE_PANEL,
+    EXPAND_SPATIAL_PANEL,
+    SELECT_SPATIAL_METHOD,
+    SELECT_SPATIAL_OPERATION,
+    REMOVE_SPATIAL_SELECT,
+    SHOW_SPATIAL_DETAILS
 } = require('../actions/queryform');
+
+const {
+    END_DRAWING
+} = require('../actions/draw');
 
 const assign = require('object-assign');
 
 const initialState = {
+    attributePanelExpanded: true,
+    spatialPanelExpanded: true,
+    showDetailsPanel: false,
+    groupLevels: 1,
+    useMapProjection: false,
     groupFields: [
         {
             id: 1,
@@ -36,7 +51,13 @@ const initialState = {
             value: null,
             exception: null
         }
-    ]
+    ],
+    spatialField: {
+        method: null,
+        attribute: "the_geom",
+        operation: "INTERSECTS",
+        geometry: null
+    }
 };
 
 function queryform(state = initialState, action) {
@@ -107,6 +128,38 @@ function queryform(state = initialState, action) {
                 }
                 return field;
             })});
+        }
+        case EXPAND_ATTRIBUTE_PANEL: {
+            return assign({}, state, {
+                attributePanelExpanded: action.expand
+            });
+        }
+        case EXPAND_SPATIAL_PANEL: {
+            return assign({}, state, {
+                spatialPanelExpanded: action.expand
+            });
+        }
+        case SELECT_SPATIAL_METHOD: {
+            return assign({}, state, {spatialField: assign({}, state.spatialField, {[action.fieldName]: action.method, geometry: null})});
+        }
+        case SELECT_SPATIAL_OPERATION: {
+            return assign({}, state, {spatialField: assign({}, state.spatialField, {[action.fieldName]: action.operation})});
+        }
+        case END_DRAWING: {
+            let newState;
+            if (action.owner === "queryform") {
+                newState = assign({}, state, {spatialField: assign({}, state.spatialField, {geometry: action.geometry})});
+            } else {
+                newState = state;
+            }
+
+            return newState;
+        }
+        case REMOVE_SPATIAL_SELECT: {
+            return assign({}, state, {spatialField: assign({}, state.spatialField, initialState.spatialField)});
+        }
+        case SHOW_SPATIAL_DETAILS: {
+            return assign({}, state, {showDetailsPanel: action.show});
         }
         default:
             return state;

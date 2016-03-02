@@ -187,13 +187,13 @@
                 }
             }
         },
-    "locate": {
-        "tooltip": "Mia posizione",
-        "metersUnit": "metri",
-        "feetUnit": "piedi",
-        "popup": "Sei nel raggio di {distance} {unit} da questo punto",
-        "outsideMapBoundsMsg": "Sembri al di fuori dei confini della mappa"
-    },
+        "locate": {
+            "tooltip": "Mia posizione",
+            "metersUnit": "metri",
+            "feetUnit": "piedi",
+            "popup": "Sei nel raggio di {distance} {unit} da questo punto",
+            "outsideMapBoundsMsg": "Sembri al di fuori dei confini della mappa"
+        },
         "helptexts": {
             "scaleBox": "Questo è il testo di aiuto per ScaleBox",
             "zoomToMaxExtentButton": "Questo è il testo di aiuto per ZoomToMaxExtentButton",
@@ -207,8 +207,58 @@
             "locateBtn": "Questo è il testo di aiuto per LocateBtn"
         },
         "queryform": {
-            "datefield": {
-                "wrong_date_range": "La data di inizio deve essere inferiore a quella di fine"
+            "config": {
+                "load_config_exception": "Errore Caricamento Configurazione"
+            },
+            "form": {
+                "header": "Cerca nel dataset",
+                "dataset_header": "Dataset"
+            },
+            "attributefilter":{
+                "add_condition": " Aggiungi Condizione",
+                "add_group": " Aggiungi Gruppo",
+                "group_label_a": "Soddisfa",
+                "group_label_b": "seguenti condizioni:",
+                "combo_placeholder": "Seleziona",
+                "attribute_filter_header": "Filtro Attributi",
+                "groupField": {
+                    "any": "ciascuna delle",
+                    "all": "tutte le",
+                    "none": "nessuna delle"
+                },
+                "datefield": {
+                    "wrong_date_range": "La data di inizio deve essere inferiore a quella di fine"
+                }
+            },
+            "spatialfilter": {
+                "selection_method": "Metodo di selezione",
+                "geometric_operation": "Operazione Geometrica",
+                "spatial_filter_header": "Filtro Spaziale",
+                "draw_start_label": "Disegna sulla mappa l'area di interesse",
+                "details": {
+                    "detail_button_label": "Dettagli",
+                    "details_header": "Dettaglio Selezione",
+                    "details_bbox_label": "Edita le coordinate per modificare l'area",
+                    "details_circle_label": "Edita i campi numerici per modificare raggio e centro del cerchio",
+                    "reset": "Reimposta allo stato iniziale",
+                    "save_bbox": "Salva le modifiche al BBOX",
+                    "save_radius": "Salva le modifiche al raggio e/o al centro",
+                    "radius": "Raggio"
+                },
+                "methods": {
+                    "zone": "Zona",
+                    "box": "BoundingBox",
+                    "buffer": "Buffer",
+                    "circle": "Cerchio",
+                    "poly": "Poligono"
+                },
+                "operations": {
+                    "intersects": "INTERSECTS",
+                    "bbox": "BBOX",
+                    "contains": "CONTAINS",
+                    "dwithin": "DWITHIN",
+                    "within": "WITHIN"
+                }
             }
         }
     }
