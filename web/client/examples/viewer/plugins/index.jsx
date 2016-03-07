@@ -41,10 +41,10 @@ var {textSearch, resultsPurge} = require("../../../actions/search");
 var {changeMeasurementState} = require('../../../actions/measurement');
 
 var {changeHelpState, changeHelpText, changeHelpwinVisibility} = require('../../../actions/help');
-var HelpWrapper = require('../../../components/Help/HelpWrapper');
-var HelpTextPanel = require('../../../components/Help/HelpTextPanel');
-var HelpBadge = require('../../../components/Help/HelpBadge');
-var HelpToggleBtn = require('../../../components/Help/HelpToggleBtn');
+var HelpWrapper = require('../../../components/help/HelpWrapper');
+var HelpTextPanel = require('../../../components/help/HelpTextPanel');
+var HelpBadge = require('../../../components/help/HelpBadge');
+var HelpToggleBtn = require('../../../components/help/HelpToggleBtn');
 var DateChooser = require('../components/DateChooser');
 var MadeWithLove = require('../img/mwlii.png');
 
