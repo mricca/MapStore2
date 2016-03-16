@@ -38,21 +38,22 @@ function configMap(configName, legacy) {
 function loadMapConfig(configName, legacy) {
     return (dispatch) => {
         return axios.all([configMap(configName, legacy), getDateConfiguration()]).then((response) => {
-            response[0].data.map.layers.map(function(layer) {
+            const url = `http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_${response[1].data.date.end}.map&`;
+            response[0].data.map.layers.map(layer => {
                 if (layer.group === 'Aree Allerta') {
                     layer.name = layer.name.substr(0, layer.name.length - 10) + response[1].data.date.end;
                     layer.title = layer.title.substr(0, layer.title.length - 10) + response[1].data.date.end;
-                    layer.url = "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_" + response[1].data.date.end + ".map&";
+                    layer.url = url;
                 }
                 if (layer.group === 'Spazializzazioni') {
                     layer.name = layer.name.substr(0, layer.name.length - 10) + response[1].data.date.end;
                     layer.title = layer.title.substr(0, layer.title.length - 10) + response[1].data.date.end;
-                    layer.url = "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_" + response[1].data.date.end + ".map&";
+                    layer.url = url;
                 }
                 if (layer.group === 'Stazioni') {
                     layer.name = layer.name.substr(0, layer.name.length - 10) + response[1].data.date.end;
                     layer.title = layer.title.substr(0, layer.title.length - 10) + response[1].data.date.end;
-                    layer.url = "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_" + response[1].data.date.end + ".map&";
+                    layer.url = url;
                 }
             }, this);
             if (typeof response[0].data === 'object') {

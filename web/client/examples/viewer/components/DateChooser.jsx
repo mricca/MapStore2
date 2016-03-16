@@ -113,14 +113,14 @@ const DateChooser = React.createClass({
     updateValueState(value) {
         const newData = value.startDate;
         const formatData = moment(newData).format('YYYY-MM-DD');
-
+        const newUrl = `http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_${formatData}.map&`;
         value.layers.map((layer) => {
             if (layer.group === 'Aree Allerta') {
                 const filter = {
                     params: {
                         LAYERS: [layer.name.substr(0, layer.name.length - 10) + formatData]
                     },
-                    url: "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_" + formatData + ".map&",
+                    url: newUrl,
                     name: layer.name.substr(0, layer.name.length - 10) + formatData,
                     title: layer.title.substr(0, layer.title.length - 10) + formatData
                 };
@@ -131,7 +131,7 @@ const DateChooser = React.createClass({
                     params: {
                         LAYERS: [layer.name.substr(0, layer.name.length - 10) + formatData]
                     },
-                    url: "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_" + formatData + ".map&",
+                    url: newUrl,
                     name: layer.name.substr(0, layer.name.length - 10) + formatData,
                     title: layer.title.substr(0, layer.title.length - 10) + formatData
                 };
@@ -142,7 +142,7 @@ const DateChooser = React.createClass({
                     params: {
                         LAYERS: [layer.name.substr(0, layer.name.length - 10) + formatData]
                     },
-                    url: "http://159.213.57.103/cgi-bin/mapserv?map=/san1/www/datimeteo_wms/datimeteo_wms_" + formatData + ".map&",
+                    url: newUrl,
                     name: layer.name.substr(0, layer.name.length - 10) + formatData,
                     title: layer.title.substr(0, layer.title.length - 10) + formatData
                 };
