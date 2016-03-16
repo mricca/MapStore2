@@ -207,6 +207,9 @@
             "locateBtn": "This is the helptext for the LocateBtn"
         },
         "queryform": {
+            "query": "Search",
+            "reset": "Reset",
+            "query_request_exception": "Request Error",
             "config": {
                 "load_config_exception": "Error Loading Configuration"
             },
@@ -235,6 +238,7 @@
                 "geometric_operation": "Operazione Geometrica",
                 "spatial_filter_header": "Spatial Filter",
                 "draw_start_label": "Draw the region on interest in the map",
+                "dwithin_label": "meters",
                 "details": {
                     "detail_button_label": "Details",
                     "details_header": "Selection Details",

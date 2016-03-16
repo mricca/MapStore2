@@ -207,6 +207,9 @@
             "locateBtn": "Questo è il testo di aiuto per LocateBtn"
         },
         "queryform": {
+            "query": "Ricerca",
+            "reset": "Reimposta",
+            "query_request_exception": "Errore nella richiesta",
             "config": {
                 "load_config_exception": "Errore Caricamento Configurazione"
             },
@@ -222,7 +225,7 @@
                 "combo_placeholder": "Seleziona",
                 "attribute_filter_header": "Filtro Attributi",
                 "groupField": {
-                    "any": "ciascuna delle",
+                    "any": "almeno una delle",
                     "all": "tutte le",
                     "none": "nessuna delle"
                 },
@@ -235,6 +238,7 @@
                 "geometric_operation": "Operazione Geometrica",
                 "spatial_filter_header": "Filtro Spaziale",
                 "draw_start_label": "Disegna sulla mappa l'area di interesse",
+                "dwithin_label": "metri",
                 "details": {
                     "detail_button_label": "Dettagli",
                     "details_header": "Dettaglio Selezione",

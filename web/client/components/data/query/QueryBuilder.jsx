@@ -9,6 +9,7 @@ const React = require('react');
 
 const GroupField = require('./GroupField');
 const SpatialFilter = require('./SpatialFilter');
+const QueryToolbar = require('./QueryToolbar');
 
 require('./queryform.css');
 
@@ -25,8 +26,16 @@ const QueryBuilder = React.createClass({
         attributePanelExpanded: React.PropTypes.bool,
         spatialPanelExpanded: React.PropTypes.bool,
         showDetailsPanel: React.PropTypes.bool,
+        toolbarEnabled: React.PropTypes.bool,
+        searchUrl: React.PropTypes.string,
+        showGeneratedFilter: React.PropTypes.oneOfType([
+            React.PropTypes.bool,
+            React.PropTypes.string
+        ]),
+        featureTypeName: React.PropTypes.string,
         attributeFilterActions: React.PropTypes.object,
-        spatialFilterActions: React.PropTypes.object
+        spatialFilterActions: React.PropTypes.object,
+        queryToolbarActions: React.PropTypes.object
     },
     getDefaultProps() {
         return {
@@ -41,6 +50,10 @@ const QueryBuilder = React.createClass({
             attributePanelExpanded: true,
             spatialPanelExpanded: true,
             showDetailsPanel: false,
+            toolbarEnabled: true,
+            searchUrl: "",
+            showGeneratedFilter: false,
+            featureTypeName: null,
             attributeFilterActions: {
                 onAddGroupField: () => {},
                 onAddFilterField: () => {},
@@ -59,29 +72,46 @@ const QueryBuilder = React.createClass({
                 onChangeDrawingStatus: () => {},
                 onRemoveSpatialSelection: () => {},
                 onShowSpatialSelectionDetails: () => {},
-                onEndDrawing: () => {}
+                onEndDrawing: () => {},
+                onChangeDwithinValue: () => {}
+            },
+            queryToolbarActions: {
+                onQuery: () => {},
+                onReset: () => {},
+                onChangeDrawingStatus: () => {}
             }
         };
     },
     render() {
         return (
-            <form id="queryFormPanel">
-                <GroupField
-                    attributes={this.props.attributes}
-                    groupLevels={this.props.groupLevels}
+            <div id="queryFormPanel">
+                <div className="querypanel">
+                    <GroupField
+                        attributes={this.props.attributes}
+                        groupLevels={this.props.groupLevels}
+                        filterFields={this.props.filterFields}
+                        groupFields={this.props.groupFields}
+                        removeButtonIcon={this.props.removeButtonIcon}
+                        addButtonIcon={this.props.addButtonIcon}
+                        attributePanelExpanded={this.props.attributePanelExpanded}
+                        actions={this.props.attributeFilterActions}/>
+                    <SpatialFilter
+                        useMapProjection={this.props.useMapProjection}
+                        spatialField={this.props.spatialField}
+                        spatialPanelExpanded={this.props.spatialPanelExpanded}
+                        showDetailsPanel={this.props.showDetailsPanel}
+                        actions={this.props.spatialFilterActions}/>
+                </div>
+                <QueryToolbar
                     filterFields={this.props.filterFields}
                     groupFields={this.props.groupFields}
-                    removeButtonIcon={this.props.removeButtonIcon}
-                    addButtonIcon={this.props.addButtonIcon}
-                    attributePanelExpanded={this.props.attributePanelExpanded}
-                    actions={this.props.attributeFilterActions}/>
-                <SpatialFilter
-                    useMapProjection={this.props.useMapProjection}
                     spatialField={this.props.spatialField}
-                    spatialPanelExpanded={this.props.spatialPanelExpanded}
-                    showDetailsPanel={this.props.showDetailsPanel}
-                    actions={this.props.spatialFilterActions}/>
-            </form>
+                    toolbarEnabled={this.props.toolbarEnabled}
+                    searchUrl={this.props.searchUrl}
+                    showGeneratedFilter={this.props.showGeneratedFilter}
+                    featureTypeName={this.props.featureTypeName}
+                    actions={this.props.queryToolbarActions}/>
+            </div>
         );
     }
 });

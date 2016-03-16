@@ -13,9 +13,7 @@ const momentLocalizer = require('react-widgets/lib/localizers/moment');
 momentLocalizer(Moment);
 
 const {DateTimePicker} = require('react-widgets');
-const {Row, Col, Modal, Button} = require('react-bootstrap');
-
-const I18N = require('../../I18N/I18N');
+const {Row, Col} = require('react-bootstrap');
 
 require('react-widgets/lib/less/react-widgets.less');
 
@@ -26,6 +24,7 @@ const DateField = React.createClass({
         operator: React.PropTypes.string,
         fieldName: React.PropTypes.string,
         fieldRowId: React.PropTypes.number,
+        attType: React.PropTypes.string,
         fieldValue: React.PropTypes.object,
         fieldException: React.PropTypes.string,
         onUpdateField: React.PropTypes.func,
@@ -38,6 +37,7 @@ const DateField = React.createClass({
             operator: null,
             fieldName: null,
             fieldRowId: null,
+            attType: null,
             fieldValue: null,
             fieldException: null,
             onUpdateField: () => {},
@@ -63,17 +63,6 @@ const DateField = React.createClass({
                                 onChange={(date) => this.updateValueState({startDate: this.props.fieldValue ? this.props.fieldValue.startDate : null, endDate: date})}/>
                         </Col>
                     </Row>
-                    <Modal show={this.props.fieldException ? true : false} bsSize="small">
-                        <Modal.Header closeButton>
-                            <Modal.Title>Date Exception</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <p><I18N.Message msgId={this.props.fieldException || ""}/></p>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button style={{"float": "right"}} onClick={this.cleanFields}>Close</Button>
-                        </Modal.Footer>
-                    </Modal>
                 </div>
             ) : (
                 <Row>
@@ -91,15 +80,14 @@ const DateField = React.createClass({
             dateRow
         );
     },
-    cleanFields() {
-        this.props.onUpdateExceptionField(this.props.fieldRowId, null);
-    },
     updateValueState(value) {
         if (value.startDate && value.endDate && (value.startDate > value.endDate)) {
             this.props.onUpdateExceptionField(this.props.fieldRowId, "queryform.attributefilter.datefield.wrong_date_range");
+        } else {
+            this.props.onUpdateExceptionField(this.props.fieldRowId, null);
         }
 
-        this.props.onUpdateField(this.props.fieldRowId, this.props.fieldName, value);
+        this.props.onUpdateField(this.props.fieldRowId, this.props.fieldName, value, this.props.attType);
     }
 });
 

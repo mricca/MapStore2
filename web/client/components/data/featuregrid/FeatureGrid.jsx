@@ -35,7 +35,9 @@ const FeatureGrid = React.createClass({
         agGridOptions: React.PropTypes.object,
         columnDefaultOptions: React.PropTypes.object,
         excludeFields: React.PropTypes.array,
-        map: React.PropTypes.object
+        map: React.PropTypes.object,
+        enableZoomToFeature: React.PropTypes.bool,
+        srs: React.PropTypes.string
     },
     getDefaultProps() {
         return {
@@ -53,7 +55,9 @@ const FeatureGrid = React.createClass({
                 width: 125
             },
             excludeFields: [],
-            map: {}
+            map: {},
+            enableZoomToFeature: true,
+            srs: "EPSG:4326"
         };
     },
     shouldComponentUpdate(nextProps) {
@@ -124,7 +128,7 @@ const FeatureGrid = React.createClass({
                 return assign({}, defaultOptions, {headerName: key, field: "properties." + key});
             });
         }
-        return [
+        return (this.props.enableZoomToFeature) ? [
         {
             onCellClicked: this.zoomToFeature,
             headerName: '',
@@ -134,7 +138,7 @@ const FeatureGrid = React.createClass({
             pinned: true,
             width: 25,
             suppressResize: true
-        }].concat(defs);
+        }].concat(defs) : defs;
 
     },
     // Generate datasource for pagination or virtual paging and infinite scrolling
@@ -151,9 +155,24 @@ const FeatureGrid = React.createClass({
     },
     zoomToFeatures() {
         let geometries = [];
+        let getGeoms = function(nodes) {
+            let geom = [];
+            nodes.forEach(function(node) {
+                if (node.group) {
+                    geom = geom.concat(getGeoms(node.children));
+                } else {
+                    geom.push(node.data.geometry);
+                }
+            });
+            return geom;
+        };
         let model = this.api.getModel();
         model.forEachNode(function(node) {
-            geometries.push(node.data.geometry);
+            if (node.group) {
+                geometries = geometries.concat(getGeoms(node.children));
+            }else {
+                geometries.push(node.data.geometry);
+            }
         });
         this.changeMapView(geometries);
     },
@@ -166,7 +185,7 @@ const FeatureGrid = React.createClass({
         let newCenter = this.props.map.center;
         const proj = this.props.map.projection || "EPSG:3857";
         if (extent) {
-            extent = CoordinateUtils.reprojectBbox(extent, "EPSG:4326", proj);
+            extent = (this.props.srs !== proj) ? CoordinateUtils.reprojectBbox(extent, this.props.srs, proj) : extent;
             // zoom by the max. extent defined in the map's config
             newZoom = mapUtils.getZoomForExtent(extent, mapSize, 0, 21);
 
@@ -215,8 +234,6 @@ const FeatureGrid = React.createClass({
         });
         return resultOfSort;
     }
-
-
 });
 
 module.exports = FeatureGrid;

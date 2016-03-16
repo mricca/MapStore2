@@ -11,11 +11,14 @@ var DebugUtils = require('../../../utils/DebugUtils');
 const {combineReducers} = require('redux');
 
 const initialState = {
+    seachURL: null,
+    showGeneratedFilter: false,
     attributePanelExpanded: true,
     spatialPanelExpanded: true,
     showDetailsPanel: false,
     groupLevels: 5,
     useMapProjection: false,
+    toolbarEnabled: true,
     groupFields: [
         {
             id: 1,
@@ -23,16 +26,7 @@ const initialState = {
             index: 0
         }
     ],
-    filterFields: [
-        {
-            rowId: 0,
-            groupId: 1,
-            attribute: null,
-            operator: "=",
-            value: null,
-            exception: null
-        }
-    ],
+    filterFields: [],
     spatialField: {
         method: null,
         attribute: "the_geom",
@@ -42,17 +36,21 @@ const initialState = {
     attributes: [
         {
             id: "ListAttribute",
+            fieldName: "ListAttribute",
             type: "list",
+            valueId: "id",
+            valueLabel: "name",
             values: [
-                "value1",
-                "value2",
-                "value3",
-                "value4",
-                "value5"
+                {id: "value1", name: "value1"},
+                {id: "value2", name: "value2"},
+                {id: "value3", name: "value3"},
+                {id: "value4", name: "value4"},
+                {id: "value5", name: "value5"}
             ]
         },
         {
             id: "DateAttribute",
+            fieldName: "DateAttribute",
             type: "date"
         }
     ]

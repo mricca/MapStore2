@@ -115,6 +115,12 @@ var CoordinatesUtils = {
                 extent[3] = (point[1] > newExtent[3]) ? point[1] : newExtent[3];
                 return extent;
             }, newExtent);
+        }else if (geoJSON.type === "Point") {
+            let point = geoJSON.coordinates;
+            newExtent[0] = point[0] - point[0] * 0.01;
+            newExtent[1] = point[1] - point[1] * 0.01;
+            newExtent[2] = point[0] + point[0] * 0.01;
+            newExtent[3] = point[1] + point[1] * 0.01;
         }else if (geoJSON.type === "GeometryCollection") {
             geoJSON.geometies.reduce((extent, geometry) => {
                 let ext = this.getGeoJSONExtent(geometry);
@@ -139,7 +145,26 @@ var CoordinatesUtils = {
         return !(
             extent.indexOf(Infinity) !== -1 || extent.indexOf(-Infinity) !== -1 ||
             extent[1] >= extent[2] || extent[1] >= extent[3]
-            );
+        );
+    },
+    calculateCircleCoordinates: function(center, radius, sides, rotation) {
+        let angle = Math.PI * ((1 / sides) - (1 / 2));
+
+        if (rotation) {
+            angle += (rotation / 180) * Math.PI;
+        }
+
+        let rotatedAngle; let x; let y;
+        let points = [[]];
+        for (let i = 0; i < sides; i++) {
+            rotatedAngle = angle + (i * 2 * Math.PI / sides);
+            x = center.x + (radius * Math.cos(rotatedAngle));
+            y = center.y + (radius * Math.sin(rotatedAngle));
+            points[0].push([x, y]);
+        }
+
+        points[0].push(points[0][0]);
+        return points;
     }
 };
 

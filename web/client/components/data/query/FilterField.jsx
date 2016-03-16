@@ -63,10 +63,12 @@ const FilterField = React.createClass({
             <Row>
                 <Col xs={4}>
                     <ComboField
-                        fieldOptions={this.props.attributes.map((attribute) => attribute.id)}
+                        valueField={'id'}
+                        textField={'name'}
+                        fieldOptions={this.props.attributes.map((attribute) => { return {id: attribute.id, name: attribute.fieldName}; })}
+                        fieldValue={this.props.filterField.attribute}
                         fieldName="attribute"
                         fieldRowId={this.props.filterField.rowId}
-                        fieldValue={this.props.filterField.attribute}
                         onUpdateField={this.updateFieldElement}
                         comboFilterType={"contains"}/>
                 </Col>
@@ -78,8 +80,8 @@ const FilterField = React.createClass({
     updateExceptionFieldElement(rowId, message) {
         this.props.onUpdateExceptionField(rowId, message);
     },
-    updateFieldElement(rowId, name, value) {
-        this.props.onUpdateField(rowId, name, value);
+    updateFieldElement(rowId, name, value, type) {
+        this.props.onUpdateField(rowId, name, value, type);
 
         if (name === "value") {
             // For cascading: filter the attributes that depends on

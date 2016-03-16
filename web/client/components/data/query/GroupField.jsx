@@ -7,7 +7,7 @@
  */
 const React = require('react');
 
-const {Row, Col, Button, Glyphicon, Panel} = require('react-bootstrap');
+const {Row, Col, Button, Glyphicon, Panel, OverlayTrigger, Tooltip} = require('react-bootstrap');
 
 const FilterField = require('./FilterField');
 const ComboField = require('./ComboField');
@@ -44,7 +44,7 @@ const GroupField = React.createClass({
             logicComboOptions: [
                 {logic: "OR", name: "queryform.attributefilter.groupField.any"},
                 {logic: "AND", name: "queryform.attributefilter.groupField.all"},
-                {logic: "NOT", name: "queryform.attributefilter.groupField.none"}
+                {logic: "AND NOT", name: "queryform.attributefilter.groupField.none"}
             ],
             actions: {
                 onAddGroupField: () => {},
@@ -69,15 +69,15 @@ const GroupField = React.createClass({
                 // The complete attribute config object
                 let attribute = attributes.filter((attr) => attr.id === filterField.attribute)[0];
                 // The reference ID of the related attribute field value
-                let attributeRefId = attribute.values.filter((value) => value[attribute.labelField] === filterField.value)[0][selected.dependson.from];
+                let attributeRefId = attribute.values.filter((value) => value[attribute.valueId] === filterField.value)[0][selected.dependson.from];
                 // The filtered values that match the attribute refId
                 let values = selected.values.filter((value) => value[selected.dependson.to] === attributeRefId);
 
-                return (selected && selected.type === "list" ? values.map((value) => value[selected.labelField] || value) : null);
+                return (selected && selected.type === "list" ? values.map((value) => { return {id: value[selected.valueId], name: value[selected.valueLabel]}; }) : null);
             }
         }
 
-        return (selected && selected.type === "list" ? selected.values.map((value) => value[selected.labelField] || value) : null);
+        return (selected && selected.type === "list" ? selected.values.map((value) => { return {id: value[selected.valueId], name: value[selected.valueLabel]}; }) : null);
     },
     renderFilterField(filterField) {
         let selectedAttribute = this.props.attributes.filter((attribute) => attribute.id === filterField.attribute)[0];
@@ -95,16 +95,29 @@ const GroupField = React.createClass({
                         onChangeCascadingValue={this.props.actions.onChangeCascadingValue}>
                         <ComboField
                             attType="list"
+                            valueField={'id'}
+                            textField={'name'}
                             fieldOptions={comboValues ? comboValues : []}
                             comboFilterType={"contains"}/>
-                        <DateField attType="date"
+                        <DateField
+                            attType="date"
                             operator={filterField.operator}/>
                     </FilterField>
                 </Col>
                 <Col xs={2}>
-                    <Button id="remove-filter-field" onClick={() => this.props.actions.onRemoveFilterField(filterField.rowId)}>
-                        <Glyphicon glyph={this.props.removeButtonIcon}/>
-                    </Button>
+                    {
+                        filterField.exception ? (
+                            <OverlayTrigger placement="bottom" overlay={(<Tooltip id={filterField.rowId + "tooltip"}><strong><I18N.Message msgId={filterField.exception || ""}/></strong></Tooltip>)}>
+                                <Button id="remove-filter-field" style={{backgroundColor: "red"}} onClick={() => this.props.actions.onRemoveFilterField(filterField.rowId)}>
+                                    <Glyphicon style={{color: "white"}} glyph="glyphicon glyphicon-warning-sign"/>
+                                </Button>
+                            </OverlayTrigger>
+                        ) : (
+                            <Button id="remove-filter-field" onClick={() => this.props.actions.onRemoveFilterField(filterField.rowId)}>
+                                <Glyphicon glyph={this.props.removeButtonIcon}/>
+                            </Button>
+                        )
+                    }
                 </Col>
             </Row>
         );
@@ -113,7 +126,7 @@ const GroupField = React.createClass({
         const removeButton = groupField.groupId ?
             (
                 <Col xs={1}>
-                    <Button onClick={() => this.props.actions.onRemoveGroupField(groupField.id)}>
+                    <Button style={{"marginTop": "2px"}} onClick={() => this.props.actions.onRemoveGroupField(groupField.id)}>
                         <Glyphicon glyph={this.props.removeButtonIcon}/>
                     </Button>
                 </Col>
@@ -126,7 +139,7 @@ const GroupField = React.createClass({
         return (
             <Row className="logicHeader">
                 {removeButton}
-                <Col xs={4}>
+                <Col xs={5}>
                     <div style={{"paddingTop": "9px", "float": "left"}}><I18N.Message msgId={"queryform.attributefilter.group_label_a"}/></div>
                     <div style={{"float": "right"}}>
                         <ComboField
@@ -145,7 +158,7 @@ const GroupField = React.createClass({
                             onUpdateField={this.updateLogicCombo}/>
                     </div>
                 </Col>
-                <Col xs={7}>
+                <Col xs={6}>
                     <div style={{"paddingTop": "9px"}}><span><I18N.Message msgId={"queryform.attributefilter.group_label_b"}/></span></div>
                 </Col>
             </Row>
