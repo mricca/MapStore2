@@ -109,7 +109,7 @@ function initGit() {
 
     const git = require('simple-git')( outFolder );
     git.init(function() {
-        git.submoduleAdd('https://github.com/geosolutions-it/MapStore2.git', 'MapStore2', function() {
+        git.submoduleAdd('https://github.com/geosol scuutions-it/MapStore2.git', 'MapStore2', function() {
             console.log('git repo OK...');
         });
     });
