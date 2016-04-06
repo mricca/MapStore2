@@ -25,6 +25,7 @@ const urlQuery = url.parse(window.location.href, true).query;
 let defaultConfig = {
     proxyUrl: "/mapstore/proxy/?url=",
     geoStoreUrl: "/mapstore/rest/geostore/",
+    printUrl: "/mapstore/print/info.json",
     bingApiKey: null
 };
 
@@ -302,7 +303,6 @@ var ConfigUtils = {
     },
     getConfigProp: function(prop) {
         return defaultConfig[prop];
-
     }
 };
 
