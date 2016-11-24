@@ -10,6 +10,7 @@ var Layers = require('../../../../utils/openlayers/Layers');
 var ol = require('openlayers');
 var objectAssign = require('object-assign');
 const CoordinatesUtils = require('../../../../utils/CoordinatesUtils');
+const ConfigUtils = require('../../../../utils/ConfigUtils');
 const ProxyUtils = require('../../../../utils/ProxyUtils');
 const {isArray} = require('lodash');
 const SecurityUtils = require('../../../../utils/SecurityUtils');
@@ -29,8 +30,10 @@ function wmsToOpenlayersOptions(options) {
     }, options.params || {});
 }
 
-function getWMSURLs( urls ) {
-    return urls.map((url) => url.split("\?")[0]);
+function getWMSURLs( options ) {
+    let mapServerMapParam = ConfigUtils.filterParameters(options.url, ["map"]);
+    let urls = isArray(options.url) ? options.url : [options.url];
+    return urls.map((url) => mapServerMapParam && mapServerMapParam.hasOwnProperty("map") ? `${url.split("\?")[0]}?map=${mapServerMapParam.map}` : url.split("\?")[0]);
 }
 
 // Works with geosolutions proxy
@@ -45,7 +48,7 @@ function proxyTileLoadFunction(imageTile, src) {
 
 Layers.registerType('wms', {
     create: (options, map) => {
-        const urls = getWMSURLs(isArray(options.url) ? options.url : [options.url]);
+        const urls = getWMSURLs(options);
         const queryParameters = wmsToOpenlayersOptions(options) || {};
         urls.forEach(url => SecurityUtils.addAuthenticationParameter(url, queryParameters));
         if (options.singleTile) {

@@ -3,6 +3,7 @@ const React = require('react');
 const {isArray} = require('lodash');
 
 const SecurityUtils = require('../../../../utils/SecurityUtils');
+const ConfigUtils = require('../../../../utils/ConfigUtils');
 
 const assign = require('object-assign');
 
@@ -23,9 +24,18 @@ const Legend = React.createClass({
    render() {
        if (this.props.layer && this.props.layer.type === "wms" && this.props.layer.url) {
            let layer = this.props.layer;
-           const url = isArray(layer.url) ?
-               layer.url[Math.floor(Math.random() * layer.url.length)] :
-               layer.url.replace(/[?].*$/g, '');
+
+           let mapServerMapParam = ConfigUtils.filterParameters(layer.url, ["map"]);
+           let url;
+           if (isArray(layer.url)) {
+               url = layer.url[Math.floor(Math.random() * layer.url.length)];
+           }else {
+               if (mapServerMapParam && mapServerMapParam.hasOwnProperty("map")) {
+                   url = `${layer.url.replace(/[?].*$/g, '')}?map=${mapServerMapParam.map}`;
+               }else {
+                   url = layer.url.replace(/[?].*$/g, '');
+               }
+           }
 
            let urlObj = urlUtil.parse(url);
            let query = assign({}, {
@@ -41,7 +51,8 @@ const Legend = React.createClass({
                LEGEND_OPTIONS: this.props.legendOptions
                // SCALE TODO
            }, layer.legendParams || {},
-           layer.params && layer.params.SLD_BODY ? {SLD_BODY: layer.params.SLD_BODY} : {});
+           layer.params && layer.params.SLD_BODY ? {SLD_BODY: layer.params.SLD_BODY} : {},
+           urlObj && urlObj.query && urlObj.query.indexOf("map") !== -1 ? {map: urlObj.query.split("=")[1]} : {});
            SecurityUtils.addAuthenticationParameter(url, query);
 
            let legendUrl = urlUtil.format({

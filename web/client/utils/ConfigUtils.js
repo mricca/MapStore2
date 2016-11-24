@@ -330,6 +330,20 @@ var ConfigUtils = {
     },
     getConfigProp: function(prop) {
         return defaultConfig[prop];
+    },
+    filterParameters: function(optionsUrl, keep) {
+        const urlparts = optionsUrl.split('?');
+        const params = {};
+        if (urlparts.length >= 2) {
+            const pars = urlparts[1].split(/[&;]/g);
+            pars.forEach((par) => {
+                const param = par.split('=');
+                if (keep.indexOf(param[0].toLowerCase()) !== -1) {
+                    params[param[0]] = param[1];
+                }
+            });
+        }
+        return params;
     }
 };
 

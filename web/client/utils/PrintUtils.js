@@ -8,6 +8,7 @@
 
 const CoordinatesUtils = require('./CoordinatesUtils');
 const MapUtils = require('./MapUtils');
+const ConfigUtils = require('./ConfigUtils');
 
 const {isArray} = require('lodash');
 
@@ -21,7 +22,11 @@ const PrintUtils = {
     normalizeUrl: (input) => {
         let result = isArray(input) ? input[0] : input;
         if (result.indexOf('?') !== -1) {
-            result = result.substring(0, result.indexOf('?'));
+            if (PrintUtils.checkMapserverLayers(input).isMapserver) {
+                result = `${result.substring(0, result.indexOf('?'))}?map=${PrintUtils.checkMapserverLayers(input).mapServerMapParam.map}`;
+            }else {
+                result = result.substring(0, result.indexOf('?'));
+            }
         }
         return result;
     },
@@ -91,17 +96,24 @@ const PrintUtils = {
         return layers.filter((layer) => PrintUtils.specCreators[layer.type] && PrintUtils.specCreators[layer.type][purpose])
             .map((layer) => PrintUtils.specCreators[layer.type][purpose](layer, spec));
     },
+    checkMapserverLayers: (input) => {
+        let mapServerMapParam = ConfigUtils.filterParameters(input, ["map"]);
+        return {
+            isMapserver: mapServerMapParam && mapServerMapParam.hasOwnProperty("map"),
+            mapServerMapParam
+        };
+    },
     specCreators: {
         wms: {
             map: (layer) => ({
-                "baseURL": PrintUtils.normalizeUrl(layer.url) + '?',
+                "baseURL": PrintUtils.normalizeUrl(layer.url) + (!PrintUtils.checkMapserverLayers(layer.url).isMapserver ? '?' : ''),
                 "opacity": layer.opacity || 1.0,
                 "singleTile": false,
                 "type": "WMS",
                 "layers": [
                    layer.name
                 ],
-                "format": layer.format || "image/jpeg",
+                "format": layer.format || "image/png",
                 "styles": [
                    layer.style || ''
                 ],
@@ -117,9 +129,11 @@ const PrintUtils = {
                 "classes": [
                    {
                       "name": "",
-                      "icons": [
-                         (isArray(layer.url) ? layer.url[0] : layer.url) + url.format({
-                             query: {
+                      "icons": [url.format({
+                             host: url.parse(isArray(layer.url) ? layer.url[0] : layer.url).host,
+                             protocol: url.parse(isArray(layer.url) ? layer.url[0] : layer.url).protocol,
+                             pathname: url.parse(isArray(layer.url) ? layer.url[0] : layer.url).pathname,
+                             query: assign({}, {
                                  TRANSPARENT: true,
                                  EXCEPTIONS: "application/vnd.ogc.se_xml",
                                  VERSION: "1.1.1",
@@ -133,7 +147,7 @@ const PrintUtils = {
                                  fontFamily: spec.fontFamily,
                                  LEGEND_OPTIONS: "forceLabels:" + (spec.forceLabels ? "on" : "") + ";fontAntialiasing:" + spec.antiAliasing + ";dpi:" + spec.legendDpi + ";fontStyle:" + (spec.bold && "bold" || (spec.italic && "italic") || ''),
                                  format: "image/png"
-                             }
+                             }, PrintUtils.checkMapserverLayers(layer.url).isMapserver ? {map: PrintUtils.checkMapserverLayers(layer.url).mapServerMapParam.map} : {})
                          })
                       ]
                    }

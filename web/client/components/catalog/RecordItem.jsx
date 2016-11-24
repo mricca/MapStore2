@@ -184,7 +184,7 @@ const RecordItem = React.createClass({
         } else {
             this.props.onLayerAdd({
                 type: "wms",
-                url: url,
+                url: (params && params.hasOwnProperty("map")) ? `${url}?map=${params.map}` : url,
                 visibility: true,
                 name: wms.params && wms.params.name,
                 title: this.props.record.title || (wms.params && wms.params.name),

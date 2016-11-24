@@ -14,6 +14,7 @@ const {isArray} = require('lodash');
 const assign = require('object-assign');
 const CoordinatesUtils = require('./CoordinatesUtils');
 const MapUtils = require('./MapUtils');
+const ConfigUtils = require('./ConfigUtils');
 
 const MapInfoUtils = {
     /**
@@ -156,6 +157,17 @@ const MapInfoUtils = {
         if (layer.queryLayers) {
             queryLayers = layer.queryLayers.join(",");
         }
+        let mapServerMapParam = ConfigUtils.filterParameters(layer.url, ["map"]);
+        let url;
+        if (isArray(layer.url)) {
+            url = layer.url[0];
+        }else {
+            if (mapServerMapParam && mapServerMapParam.hasOwnProperty("map")) {
+                url = `${layer.url.replace(/[?].*$/g, '')}?map=${mapServerMapParam.map}`;
+            }else {
+                url = layer.url.replace(/[?].*$/g, '');
+            }
+        }
 
         return {
             request: {
@@ -180,9 +192,7 @@ const MapInfoUtils = {
                 title: layer.title,
                 regex: layer.featureInfoRegex
             },
-            url: isArray(layer.url) ?
-                layer.url[0] :
-                layer.url.replace(/[?].*$/g, '')
+            url: url
         };
     },
     buildIdentifyRequest(layer, props) {
