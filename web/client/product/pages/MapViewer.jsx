@@ -45,6 +45,7 @@ const MapViewerPage = React.createClass({
             // VMap = require('../components/viewer/Map')(this.props.params.mapType);
             let mapId = (this.props.params.mapId === '0') ? null : this.props.params.mapId;
             let config = urlQuery && urlQuery.config || null;
+            let defaultName = config;
             // if mapId is a string, is the name of the config to load
             try {
                 let mapIdNumber = parseInt(mapId, 10);
@@ -56,7 +57,7 @@ const MapViewerPage = React.createClass({
                 config = mapId;
                 mapId = null;
             }
-            const {configUrl} = ConfigUtils.getConfigurationOptions({mapId, config});
+            const {configUrl} = ConfigUtils.getConfigurationOptions({mapId, config}, defaultName);
             this.props.reset();
             this.props.loadMapConfig(configUrl, mapId);
         }
