@@ -105,6 +105,7 @@ const OpenlayersLayer = React.createClass({
             if (this.layer && !this.layer.detached) {
                 this.addLayer(options);
             }
+            this.forceUpdate();
         }
     },
     updateLayer(newProps, oldProps) {
