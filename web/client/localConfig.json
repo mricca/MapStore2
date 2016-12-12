@@ -1,7 +1,7 @@
 {
 	"proxyUrl": "/mapstore/proxy/?url=",
 	"geoStoreUrl": "/mapstore/rest/geostore/",
-  "printUrl": "http://demo.geo-solutions.it/geoserver/pdf/info.json",
+  "printUrl": "http://geoportale.lamma.rete.toscana.it/geoserver_ds/pdf/info.json",
   "bingApiKey": "AhuXBu7ipR1gNbBfXhtUAyCZ6rkC5PkWpxs2MnMRZ1ZupxQfivjLCch22ozKSCAn",
   "mapquestApiKey": "__API_KEY_MAPQUEST__",
 	"initialMapFilter": "",
@@ -249,7 +249,13 @@
 					"glyph": "1-stilo",
 					"buttonStyle": "primary",
 					"buttonClassName": "square-button",
-					"singleSection": true
+					"singleSection": true,
+          "menuOptions": {
+            "docked": false,
+            "single": true,
+            "width": 400,
+            "overlapMap": true
+          }
 				}
     },
     {
@@ -505,6 +511,14 @@
 			}
     },
 		"OmniBar",
+    {
+      "name": "SearchDate",
+      "cfg": {
+          "tooltip": "searchdate-tooltip",
+          "toggle": true,
+					"toolsCfg": [{"toggle": true}]
+      }
+    },
     {
 			"name": "Login",
       "cfg": {
