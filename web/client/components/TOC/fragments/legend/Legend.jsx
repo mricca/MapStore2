@@ -41,8 +41,8 @@ const Legend = React.createClass({
                LEGEND_OPTIONS: this.props.legendOptions
                // SCALE TODO
            }, layer.legendParams || {},
-           layer.params && layer.params.SLD_BODY ? {SLD_BODY: layer.params.SLD_BODY} : {},
-           layer.params ? layer.params : {});
+           layer.params || {},
+           layer.params && layer.params.SLD_BODY ? {SLD_BODY: layer.params.SLD_BODY} : {});
            SecurityUtils.addAuthenticationParameter(url, query);
 
            let legendUrl = urlUtil.format({

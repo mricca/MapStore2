@@ -58,6 +58,8 @@ module.exports = {
         SavePlugin: require('../plugins/Save'),
         SaveAsPlugin: require('../plugins/SaveAs'),
         CreateNewMapPlugin: require('../plugins/CreateNewMap'),
+        QueryPanelPlugin: require('../plugins/QueryPanel'),
+        FeatureGridPlugin: require('../plugins/FeatureGrid'),
         SearchDatePlugin: require('../plugins/SearchDate')
     },
     requires: {

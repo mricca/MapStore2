@@ -115,7 +115,7 @@ const SaveAs = React.createClass({
                 zoom: this.props.map.zoom
             };
         let layers = this.props.layers.map((layer) => {
-            return assign({}, {
+            return {
                 features: layer.features,
                 format: layer.format,
                 group: layer.group,
@@ -133,8 +133,9 @@ const SaveAs = React.createClass({
                 url: layer.url,
                 bbox: layer.bbox,
                 visibility: layer.visibility,
-                singleTile: layer.singleTile || false
-            }, layer.params ? {params: layer.params} : {});
+                singleTile: layer.singleTile || false,
+                ...assign({}, layer.params ? {params: layer.params} : {})
+            };
         });
         // Groups are ignored, as they already are defined in the layers
         let resultingmap = {

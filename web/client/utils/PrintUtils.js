@@ -99,7 +99,7 @@ const PrintUtils = {
     specCreators: {
         wms: {
             map: (layer) => ({
-                "baseURL": PrintUtils.normalizeUrl(layer.url) + (layer.params && layer.params.hasOwnProperty('map') ? '' : '?'),
+                "baseURL": PrintUtils.normalizeUrl(layer.url) + '?',
                 "opacity": layer.opacity || 1.0,
                 "singleTile": false,
                 "type": "WMS",
@@ -122,11 +122,9 @@ const PrintUtils = {
                 "classes": [
                    {
                       "name": "",
-                      "icons": [url.format({
-                             host: url.parse(isArray(layer.url) ? layer.url[0] : layer.url).host,
-                             protocol: url.parse(isArray(layer.url) ? layer.url[0] : layer.url).protocol,
-                             pathname: url.parse(isArray(layer.url) ? layer.url[0] : layer.url).pathname,
-                             query: assign({}, {
+                      "icons": [
+                         PrintUtils.normalizeUrl(layer.url) + url.format({
+                             query: {
                                  TRANSPARENT: true,
                                  EXCEPTIONS: "application/vnd.ogc.se_xml",
                                  VERSION: "1.1.1",
@@ -139,8 +137,9 @@ const PrintUtils = {
                                  minSymbolSize: spec.iconSize,
                                  fontFamily: spec.fontFamily,
                                  LEGEND_OPTIONS: "forceLabels:" + (spec.forceLabels ? "on" : "") + ";fontAntialiasing:" + spec.antiAliasing + ";dpi:" + spec.legendDpi + ";fontStyle:" + (spec.bold && "bold" || (spec.italic && "italic") || ''),
-                                 format: "image/png"
-                             }, layer.params || {})
+                                 format: "image/png",
+                                 ...assign({}, layer.params)
+                             }
                          })
                       ]
                    }
