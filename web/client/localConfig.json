@@ -1,7 +1,10 @@
 {
-	"proxyUrl": "/mapstore/proxy/?url=",
-	"geoStoreUrl": "/mapstore/rest/geostore/",
-  "printUrl": "http://geoportale.lamma.rete.toscana.it/geoserver_ds/pdf/info.json",
+  "proxyUrl": {
+    "url": "/mapstore/proxy/?url=",
+    "useCORS": ["http://demo.geo-solutions.it/geoserver"]
+  },
+  "geoStoreUrl": "/mapstore/rest/geostore/",
+  "printUrl": "http://demo.geo-solutions.it/geoserver/pdf/info.json",
   "bingApiKey": "AhuXBu7ipR1gNbBfXhtUAyCZ6rkC5PkWpxs2MnMRZ1ZupxQfivjLCch22ozKSCAn",
   "mapquestApiKey": "__API_KEY_MAPQUEST__",
   "initialMapFilter": "",
@@ -209,7 +212,7 @@
       }
     },
     "OmniBar",
-     "FeatureGrid",
+    "FeatureGrid",
     {
       "name": "BurgerMenu",
       "hide": true
@@ -224,6 +227,7 @@
   "desktop": [{
       "name": "Map",
       "cfg": {
+        "tools": ["measurement", "locate", "overview", "scalebar", "draw", "highlight"],
         "toolsOptions": {
           "scalebar": {
             "leaflet": {
@@ -283,24 +287,7 @@
             "continuous": false
           },
           "collapsible": false
-        },
-        "excludeOptions": [
-            "links",
-            "allowedSRS",
-            "title",
-            "type",
-            "visibility",
-            "params",
-            "legend",
-            "statistics",
-            "columnDefs",
-            "advancedFilter",
-            "boundingBox",
-            "capabilities",
-            "describeCoverage",
-            "describeLayer",
-            "loading"
-        ]
+        }
        }
     },
     "MadeWithLove",
@@ -319,9 +306,17 @@
         }
     }, {
         "name": "Home"
+    },{
+      "name": "FeatureGrid",
+      "cfg": {
+        "pagination": true,
+        "minDockSize": 0.1,
+        "maxDockSize":1.0
+      }
     }, {
         "name": "TOC",
         "cfg": {
+          "activateQueryTool": true,
           "visibilityCheckType": "glyph",
           "settingsOptions": {
             "includeCloseButton": false,
@@ -431,7 +426,8 @@
           "closeGlyph": "1-close",
           "initialCatalogURL": {
             "csw": "http://demo.geo-solutions.it/geoserver/csw",
-            "wms": "http://demo.geo-solutions.it/geoserver/wms"
+            "wms": "http://demo.geo-solutions.it/geoserver/wms",
+            "wmts": "http://demo.geo-solutions.it/geoserver/gwc/service/wmts"
           }
         }
     }, {
@@ -620,24 +616,6 @@
                "maxHeight": "70%",
                "marginBottom": 0
            },
-           "excludeOptions": [
-              "links",
-              "allowedSRS",
-              "title",
-              "type",
-              "visibility",
-              "params",
-              "legend",
-              "statistics",
-              "columnDefs",
-              "advancedFilter",
-              "boundingBox",
-              "capabilities",
-              "describeCoverage",
-              "describeLayer",
-              "loading"
-
-          ],
            "draggable": false,
            "collapsible": true,
            "viewerOptions": {
@@ -661,7 +639,7 @@
               "alwaysVisible": true
             }
           }
-      }, "FeatureGrid", {
+      }, {
           "name": "TOC",
           "cfg": {
             "visibilityCheckType": "glyph",
@@ -845,6 +823,12 @@
       "cfg": {
         "id": "usermanager"
       }
-    }]
+    },{
+    "name": "GroupManager",
+    "hide": true,
+    "cfg": {
+      "id": "GroupManager"
+    }
+  }]
   }
 }

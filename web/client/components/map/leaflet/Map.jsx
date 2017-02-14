@@ -150,7 +150,13 @@ let LeafletMap = React.createClass({
                     this.props.onLayerLoading(loadingEvent.target.layerId);
                 });
                 event.layer.on('load', (loadEvent) => { this.props.onLayerLoad(loadEvent.target.layerId, hadError); });
-                event.layer.on('tileerror', (errorEvent) => { hadError = true; this.props.onLayerError(errorEvent.target.layerId); });
+                event.layer.on('tileerror', (errorEvent) => {
+                    const isError = errorEvent.target.onError ? (errorEvent.target.onError(errorEvent)) : true;
+                    if (isError) {
+                        hadError = true;
+                        this.props.onLayerError(errorEvent.target.layerId);
+                    }
+                });
             }
         });
 
@@ -277,8 +283,8 @@ let LeafletMap = React.createClass({
     mouseMoveEvent(event) {
         let pos = event.latlng.wrap();
         this.props.onMouseMove({
-            x: pos.lng,
-            y: pos.lat,
+            x: pos.lng || 0.0,
+            y: pos.lat || 0.0,
             crs: "EPSG:4326",
             pixel: {
                 x: event.containerPoint.x,

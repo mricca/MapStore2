@@ -7,21 +7,32 @@
  */
 const CHANGE_MEASUREMENT_TOOL = 'CHANGE_MEASUREMENT_TOOL';
 const CHANGE_MEASUREMENT_STATE = 'CHANGE_MEASUREMENT_STATE';
+const {setControlProperty} = require('./controls');
 
-function changeMeasurement(measurement) {
+// TODO: the measurement control should use the "controls" state
+function toggleMeasurement(measurement) {
     return {
         type: CHANGE_MEASUREMENT_TOOL,
         ...measurement
     };
 }
 
+function changeMeasurement(measurement) {
+    return (dispatch) => {
+        dispatch(setControlProperty('info', 'enabled', false, false));
+        dispatch(toggleMeasurement(measurement));
+    };
+}
+
 function changeMeasurementState(measureState) {
     return {
         type: CHANGE_MEASUREMENT_STATE,
+        pointMeasureEnabled: measureState.pointMeasureEnabled,
         lineMeasureEnabled: measureState.lineMeasureEnabled,
         areaMeasureEnabled: measureState.areaMeasureEnabled,
         bearingMeasureEnabled: measureState.bearingMeasureEnabled,
         geomType: measureState.geomType,
+        point: measureState.point,
         len: measureState.len,
         area: measureState.area,
         bearing: measureState.bearing,

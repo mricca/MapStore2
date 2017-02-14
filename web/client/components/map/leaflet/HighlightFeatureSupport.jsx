@@ -7,6 +7,7 @@
  */
 
 const React = require('react');
+const {findIndex} = require('lodash');
 
 const HighlightFeatureSupport = React.createClass({
     propTypes: {
@@ -89,7 +90,7 @@ const HighlightFeatureSupport = React.createClass({
     featureClicked(e) {
         let layer = e.layer;
         if ((e.originalEvent.ctrlKey || e.originalEvent.metaKey) && layer) {
-            let idx = this._selectedFeatures.findIndex((f) => {
+            let idx = findIndex(this._selectedFeatures, (f) => {
                 return f === layer;
             });
             if (idx !== -1) {
@@ -110,7 +111,7 @@ const HighlightFeatureSupport = React.createClass({
         this.props.updateHighlighted(this._selectedFeatures.map((f) => {return f.msId; }), "");
     },
     cleanSupport() {
-        if (this._layer !== null) {
+        if (this._layer) {
             this._selectedFeatures.map((f) => {this._layer.resetStyle(f); });
             this._layer.off("click", this.featureClicked, this);
         }

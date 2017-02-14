@@ -45,6 +45,7 @@ const searchAndPaginate = (json, startPosition, maxRecords, text) => {
         numberOfRecordsMatched: filteredLayers.length,
         numberOfRecordsReturned: Math.min(maxRecords, filteredLayers.length),
         nextRecord: startPosition + Math.min(maxRecords, filteredLayers.length) + 1,
+        service: json.WMS_Capabilities.Service,
         records: filteredLayers
             .filter((layer, index) => index >= (startPosition - 1) && index < (startPosition - 1) + maxRecords)
             .map((layer) => assign({}, layer, {SRS: SRSList}))
@@ -109,6 +110,32 @@ const Api = {
                 data: json
             };
             return searchAndPaginate(json, startPosition, maxRecords, text);
+        });
+    },
+    describeLayers: function(url, layers) {
+        const parsed = urlUtil.parse(url, true);
+        const describeLayerUrl = urlUtil.format(assign({}, parsed, {
+            query: assign({
+                service: "WMS",
+                version: "1.1.1",
+                layers: layers,
+                request: "DescribeLayer"
+            }, parsed.query)
+        }));
+        return axios.get(parseUrl(describeLayerUrl)).then((response) => {
+            let decriptions;
+            xml2js.parseString(response.data, {explicitArray: false}, (ignore, result) => {
+                decriptions = result && result.WMS_DescribeLayerResponse && result.WMS_DescribeLayerResponse.LayerDescription;
+            });
+            decriptions = Array.isArray(decriptions) ? decriptions : [decriptions];
+            // make it compatible with json format of describe layer
+            return decriptions.map(desc => ({
+                ...(desc && desc.$ || {}),
+                layerName: desc.$ && desc.$.name,
+                query: {
+                    ...(desc && desc.query && desc.query.$ || {})
+                }
+            }));
         });
     },
     textSearch: function(url, startPosition, maxRecords, text) {

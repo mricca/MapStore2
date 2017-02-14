@@ -81,6 +81,83 @@ describe('Test the map reducer', () => {
         expect(state.projection).toBe('EPSG:4326');
     });
 
+    it('sets new map scales', () => {
+        // set map scales
+        const action = {
+            type: 'CHANGE_MAP_SCALES',
+            scales: [9600, 960]
+        };
+        const resolutions = [2.54, 0.254];
+        const action2 = {
+            type: 'CHANGE_MAP_SCALES',
+            scales: [38400, 19200, 9600, 4800]
+        };
+        const resolutions2 = [10.16, 5.08, 2.54, 1.27];
+        // reset map scales
+        const actionReset = {
+            type: 'CHANGE_MAP_SCALES'
+        };
+
+        // add map scales
+        var state = mapConfig({projection: "EPSG:3857"}, action);
+        expect(state.mapOptions).toExist();
+        expect(state.mapOptions.view).toExist();
+        expect(state.mapOptions.view.resolutions).toEqual(resolutions);
+        expect(state.projection).toBe("EPSG:3857");
+
+        // update map scales
+        state = mapConfig(state, action2);
+        expect(state.mapOptions).toExist();
+        expect(state.mapOptions.view).toExist();
+        expect(state.mapOptions.view.resolutions).toEqual(resolutions2);
+
+        // remove state.mapOptions on map scales reset
+        state = mapConfig({
+            mapOptions: {
+                view: {
+                    resolutions: [8, 4, 2]
+                }
+            },
+            prop: 'prop'
+        }, actionReset);
+        expect(state.mapOptions).toNotExist();
+        expect(state.prop).toBe('prop');
+
+        // remove only state.mapOptions.view on map scales reset
+        state = mapConfig({
+            mapOptions: {
+                view: {
+                    resolutions: [8, 4, 2]
+                },
+                prop: 'prop'
+            }
+        }, actionReset);
+        expect(state.mapOptions).toExist();
+        expect(state.mapOptions.view).toNotExist();
+        expect(state.mapOptions.prop).toBe('prop');
+
+        // remove only state.mapOptions.view.resolutions on map scales reset
+        state = mapConfig({
+            mapOptions: {
+                view: {
+                    resolutions: [8, 4, 2],
+                    prop: 'prop'
+                }
+            }
+        }, actionReset);
+        expect(state.mapOptions).toExist();
+        expect(state.mapOptions.view).toExist();
+        expect(state.mapOptions.view.resolutions).toNotExist();
+        expect(state.mapOptions.view.prop).toBe('prop');
+
+        // add map scales with no initial state
+        state = mapConfig(undefined, action);
+        expect(state).toExist();
+        expect(state.mapOptions).toExist();
+        expect(state.mapOptions.view).toExist();
+        expect(state.mapOptions.view.resolutions).toExist();
+    });
+
     it('zoom to extent', () => {
         const action = {
             type: 'ZOOM_TO_EXTENT',
@@ -105,7 +182,7 @@ describe('Test the map reducer', () => {
         expect(state.bbox.bounds.maxx).toExist();
         expect(state.bbox.bounds.maxy).toExist();
         state = mapConfig({projection: "EPSG:900913"}, action2);
-        expect(state.zoom).toBe(2);
+        expect(state.zoom).toBe(1);
         expect(state.bbox).toExist();
         expect(state.bbox.bounds).toExist();
         expect(state.bbox.bounds.minx).toExist();

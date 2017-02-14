@@ -8,6 +8,7 @@
 
 const React = require('react');
 const {Panel, Glyphicon} = require('react-bootstrap');
+const {findIndex} = require('lodash');
 
 require('./css/identify.css');
 
@@ -45,7 +46,7 @@ const Identify = React.createClass({
         changeMousePointer: React.PropTypes.func,
         maxItems: React.PropTypes.number,
         excludeParams: React.PropTypes.array,
-        excludeOptions: React.PropTypes.array,
+        includeOptions: React.PropTypes.array,
         showRevGeocode: React.PropTypes.func,
         hideRevGeocode: React.PropTypes.func,
         showModalReverse: React.PropTypes.bool,
@@ -98,7 +99,12 @@ const Identify = React.createClass({
             layers: [],
             maxItems: 10,
             excludeParams: ["SLD_BODY"],
-            excludeOptions: ["origin"],
+            includeOptions: [
+                "buffer",
+                "cql_filter",
+                "filter",
+                "propertyName"
+            ],
             panelClassName: "panel default-panel",
             headerClassName: "panel-heading",
             bodyClassName: "panel-body",
@@ -226,15 +232,15 @@ const Identify = React.createClass({
         return false;
     },
    filterRequestParams(layer) {
-        let excludeOpt = this.props.excludeOptions || [];
+        let includeOpt = this.props.includeOptions || [];
         let excludeList = this.props.excludeParams || [];
         let options = Object.keys(layer).reduce((op, next) => {
-            if (next !== "params" && excludeOpt.indexOf(next) === -1) {
+            if (next !== "params" && includeOpt.indexOf(next) !== -1) {
                 op[next] = layer[next];
             }else if (next === "params" && excludeList.length > 0) {
                 let params = layer[next];
                 Object.keys(params).forEach((n) => {
-                    if (excludeList.findIndex((el) => {return (el === n); }) === -1) {
+                    if (findIndex(excludeList, (el) => {return (el === n); }) === -1) {
                         op[n] = params[n];
                     }
                 }, {});

@@ -117,7 +117,7 @@
             "openInANewTab":"Apri mappa",
             "deleteMap":"Elimina Mappa",
             "deleteMapMessage": "Vuoi eliminare questa mappa?",
-            "editMapMetadata":"Modifica Metadati",
+            "editMapMetadata":"Modifica Proprietà",
             "mapTypes_combo": "Seleziona il visualizzatore di mappa:",
             "maps_title": "Mappe",
             "locales_combo": "Lingua:"
@@ -164,6 +164,12 @@
             }
         },
         "toc": {
+            "toggleLayerVisibility": "Attiva o disattiva la visibilità del livello",
+            "displayLegendAndTools": "Visualizza legenda e strumenti aggiuntivi",
+            "zoomToLayerExtent": "Zoom all' estensione del livello",
+            "editLayerProperties": "Modifica proprietà dal livello",
+            "searchFeatures": "Effettua una ricerca su questo livello...",
+            "removeLayer": "Rimuovi livello",
             "loadingerror": "Il livello non è stato caricato correttamente"
         },
         "print":{
@@ -318,8 +324,8 @@
                 "handlers": {
                     "edit": {
                         "tooltip": {
-                            "text": "Trascina o selezione per modificare una feature.",
-                            "subtext": "Click annulla per scartare le modifiche to undo changes."
+                            "text": "Trascina o seleziona per modificare una feature.",
+                            "subtext": "Click annulla per scartare le modifiche."
                         }
                     },
                     "remove": {
@@ -347,8 +353,7 @@
             "zoomToMaxExtentButton": "Questo è il testo di aiuto per ZoomToMaxExtentButton",
             "zoomIn": "Questo è il testo di aiuto per ZoomIn",
             "zoomOut": "Questo è il testo di aiuto per ZoomOut",
-            "searchBar": "Scrivi un indirizzo di un luogo oer trovarlo. esempio:  '1st avenue, new york'. Puoi anche digitare le coordinate in questo formato: 43.87,10.20",
-            "layerSwitcher": "Questo è il testo di aiuto per LayerSwitcher",
+            "searchBar": "Scrivi un indirizzo di un luogo per trovarlo. esempio:  '1st avenue, new york'. Puoi anche digitare le coordinate in questo formato: 43.87,10.20",
             "metadataExplorer": "Questo è il testo di aiuto per MetadataExplorer",
             "settingsPanel": "Questo è il testo di aiuto per SettingsPanel",
             "gohome": "Questo è il testo di aiuto per Home",
@@ -478,6 +483,8 @@
         },
         "usergroups": {
           "searchGroups": "Cerca gruppi...",
+          "nameLimit": "La massima lunghezza del nome del gruppo è prevista in 255 caratteri.",
+          "descLimit": "La massima lunghezza della descrizione del gruppo è prevista in 255 caratteri.",
           "groups": "Gruppi",
           "editGroup": "Modifica Gruppo",
           "deleteGroup": "Rimuovi Gruppo",
@@ -546,6 +553,8 @@
             "catalogUrlPlaceholder": "URL del catalogo...",
             "textSearchPlaceholder": "testo da cercare...",
             "search": "Cerca",
+            "reset": "Reset",
+            "options": "Opzioni",
             "srs_not_allowed": "Il sistema di coordinate della mappa non è supportato da questo servizio"
         },
         "uploader": {
@@ -553,7 +562,7 @@
             "type": "Type",
             "lastModified": "Last Modified",
             "filesize": "Size",
-            "beforeUpload": " Doing pre-upload operations... ",
+            "beforeUpload": "Doing pre-upload operations... ",
             "uploadingFiles": "Uploading Files...",
             "dropfile": "drop files here to upload",
             "dropfileImport": "drop here files to add it to this process"
@@ -685,6 +694,7 @@
             "export": "Esporta risultati",
             "selectall": "Seleziona tutti",
             "deselectall": "Deseleziona tutti",
+            "backtosearch": "Ritorna alla ricerca",
             "pagination": {
                 "page": "Pagina",
                 "of":   "di",

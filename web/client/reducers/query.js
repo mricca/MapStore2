@@ -12,17 +12,23 @@ const {
     FEATURE_TYPE_ERROR,
     FEATURE_LOADED,
     FEATURE_ERROR,
+    QUERY_CREATE,
     QUERY_RESULT,
     QUERY_ERROR,
-    RESET_QUERY
+    RESET_QUERY,
+    FEATURE_CLOSE
 } = require('../actions/wfsquery');
+
+const {QUERY_FORM_RESET} = require('../actions/queryform');
+const {RESET_CONTROLS} = require('../actions/controls');
 
 const assign = require('object-assign');
 
 const types = {
     'xsd:string': 'string',
     'xsd:dateTime': 'date',
-    'xsd:number': 'number'
+    'xsd:number': 'number',
+    'xsd:int': 'number'
 };
 const fieldConfig = {};
 const extractInfo = (featureType) => {
@@ -66,7 +72,7 @@ const extractData = (feature) => {
 const initialState = {
     featureTypes: {},
     data: {},
-    result: '',
+    result: null,
     resultError: null
 };
 
@@ -98,22 +104,48 @@ function query(state = initialState, action) {
                 featureTypes: assign({}, state.data, {[action.typeName]: {error: action.error}})
             });
         }
+        case QUERY_CREATE: {
+            return assign({}, state, {
+                open: true,
+                isNew: true,
+                searchUrl: action.searchUrl,
+                filterObj: action.filterObj
+            });
+        }
         case QUERY_RESULT: {
             return assign({}, state, {
+                isNew: false,
                 result: action.result,
+                searchUrl: action.searchUrl,
+                filterObj: action.filterObj,
                 resultError: null
             });
         }
         case QUERY_ERROR: {
             return assign({}, state, {
-                result: '',
+                isNew: false,
+                result: null,
                 resultError: action.error
             });
         }
+        case RESET_CONTROLS:
+        case QUERY_FORM_RESET:
+            return assign({}, state, {
+                open: false,
+                isNew: false,
+                result: null,
+                filterObj: null,
+                searchUrl: null
+            });
         case RESET_QUERY: {
             return assign({}, state, {
-                result: '',
+                result: null,
                 resultError: null
+            });
+        }
+        case FEATURE_CLOSE: {
+            return assign({}, state, {
+                open: false
             });
         }
         default:

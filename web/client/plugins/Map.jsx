@@ -14,7 +14,7 @@ var Spinner = require('react-spinkit');
 require('./map/css/map.css');
 
 const Message = require('../components/I18N/Message');
-
+const {isString} = require('lodash');
 let plugins;
 
 const MapPlugin = React.createClass({
@@ -29,7 +29,8 @@ const MapPlugin = React.createClass({
         tools: React.PropTypes.array,
         options: React.PropTypes.object,
         toolsOptions: React.PropTypes.object,
-        actions: React.PropTypes.object
+        actions: React.PropTypes.object,
+        features: React.PropTypes.array
     },
     getDefaultProps() {
         return {
@@ -65,6 +66,35 @@ const MapPlugin = React.createClass({
             this.updatePlugins(newProps);
         }
     },
+    getHighlightLayer(projection, index) {
+        return (<plugins.Layer type="vector" srs={projection} position={index} key="highlight" options={{name: "highlight"}}>
+                    {this.props.features.map( (feature) => {
+                        return (<plugins.Feature
+                            key={feature.id}
+                            type={feature.type}
+                            geometry={feature.geometry}/>);
+                    })}
+                </plugins.Layer>);
+    },
+    getTool(tool) {
+        if (isString(tool)) {
+            return {
+                name: tool,
+                impl: plugins.tools[tool]
+            };
+        }
+        return tool[this.props.mapType] || tool;
+    },
+    renderLayers() {
+        const projection = this.props.map.projection || 'EPSG:3857';
+        return this.props.layers.map((layer, index) => {
+            return (
+                <plugins.Layer type={layer.type} srs={projection} position={index} key={layer.id || layer.name} options={layer}>
+                    {this.renderLayerContent(layer)}
+                </plugins.Layer>
+            );
+        }).concat(this.props.features && this.props.features.length && this.getHighlightLayer(projection, this.props.layers.length) || []);
+    },
     renderLayerContent(layer) {
         if (layer.features && layer.type === "vector") {
             return layer.features.map( (feature) => {
@@ -82,21 +112,11 @@ const MapPlugin = React.createClass({
         }
         return null;
     },
-    renderLayers() {
-        const projection = this.props.map.projection || 'EPSG:3857';
-        return this.props.layers.map((layer, index) => {
-            return (
-                <plugins.Layer type={layer.type} srs={projection} position={index} key={layer.id || layer.name} options={layer}>
-                    {this.renderLayerContent(layer)}
-                </plugins.Layer>
-            );
-        });
-    },
     renderSupportTools() {
         return this.props.tools.map((tool) => {
-            const Tool = plugins.tools[tool];
-            const options = (this.props.toolsOptions[tool] && this.props.toolsOptions[tool][this.props.mapType]) || this.props.toolsOptions[tool] || {};
-            return <Tool key={tool} {...options}/>;
+            const Tool = this.getTool(tool);
+            const options = (this.props.toolsOptions[Tool.name] && this.props.toolsOptions[Tool.name][this.props.mapType]) || this.props.toolsOptions[Tool.name] || {};
+            return <Tool.impl key={Tool.name} {...options}/>;
         });
     },
     render() {
@@ -141,14 +161,22 @@ const MapPlugin = React.createClass({
 const {mapSelector} = require('../selectors/map');
 const {layerSelectorWithMarkers} = require('../selectors/layers');
 
+const highlightSelector = (state) => state.highlight && state.highlight.select;
+
 const selector = createSelector(
-    [mapSelector, layerSelectorWithMarkers, (state) => state.mapInitialConfig && state.mapInitialConfig.loadingError && state.mapInitialConfig.loadingError.data], (map, layers, loadingError) => ({
+    [
+        mapSelector,
+        layerSelectorWithMarkers,
+        highlightSelector,
+        (state) => state.mapInitialConfig && state.mapInitialConfig.loadingError && state.mapInitialConfig.loadingError.data
+    ], (map, layers, features, loadingError) => ({
         map,
         layers,
+        features,
         loadingError
     })
 );
 module.exports = {
     MapPlugin: connect(selector)(MapPlugin),
-    reducers: {}
+    reducers: { draw: require('../reducers/draw') }
 };

@@ -57,7 +57,7 @@ const CoordinatesUtils = {
         const destProj = Proj4js.defs(dest) ? new Proj4js.Proj(dest) : null;
         if (sourceProj && destProj) {
             let p = isArray(point) ? Proj4js.toPoint(point) : Proj4js.toPoint([point.x, point.y]);
-            const transformed = assign({}, Proj4js.transform(sourceProj, destProj, p), {srs: dest});
+            const transformed = assign({}, source === dest ? p : Proj4js.transform(sourceProj, destProj, p), {srs: dest});
             if (normalize) {
                 return CoordinatesUtils.normalizePoint(transformed);
             }
@@ -163,6 +163,18 @@ const CoordinatesUtils = {
             return 'EPSG:900913';
         }
         return srs;
+    },
+    getEquivalentSRS(srs) {
+        if (srs === 'EPSG:900913' || srs === 'EPSG:3857') {
+            return ['EPSG:3857', 'EPSG:900913'];
+        }
+        return [srs];
+    },
+    getEPSGCode(code) {
+        if (code.indexOf(':') !== -1) {
+            return 'EPSG:' + code.substring(code.lastIndexOf(':') + 1);
+        }
+        return code;
     },
     normalizeSRS: function(srs, allowedSRS) {
         const result = (srs === 'EPSG:900913' ? 'EPSG:3857' : srs);

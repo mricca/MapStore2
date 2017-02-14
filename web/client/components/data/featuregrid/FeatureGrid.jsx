@@ -8,15 +8,14 @@
 const React = require('react');
 const {AgGridReact, reactCellRendererFactory} = require('ag-grid-react');
 const {keys, isEqual, isFunction} = require('lodash');
-const ZoomToRenderer = require("./ZoomToFeatureRenderer");
-const {ButtonToolbar} = require('react-bootstrap');
+const ZoomToFeatureIcon = require("./ZoomToFeatureIcon");
+const ZoomToFeatureRenderer = require('./ZoomToFeatureRenderer');
+const {ButtonToolbar, Button, Glyphicon} = require('react-bootstrap');
 const assign = require("object-assign");
 
 const mapUtils = require('../../../utils/MapUtils');
 const configUtils = require('../../../utils/ConfigUtils');
 const CoordinateUtils = require('../../../utils/CoordinatesUtils');
-
-const img = require('./images/magnifier.png');
 
 const I18N = require('../../I18N/I18N');
 const LocaleUtils = require('../../../utils/LocaleUtils');
@@ -50,7 +49,9 @@ const FeatureGrid = React.createClass({
         selectAll: React.PropTypes.func,
         selectAllActive: React.PropTypes.bool,
         zoomToFeatureAction: React.PropTypes.func,
-        exportAction: React.PropTypes.func
+        exportAction: React.PropTypes.func,
+        tools: React.PropTypes.array,
+        useIcons: React.PropTypes.bool
     },
     contextTypes: {
         messages: React.PropTypes.object
@@ -63,11 +64,14 @@ const FeatureGrid = React.createClass({
             columnDefs: null,
             changeMapView: () => {},
             selectFeatures: () => {},
-            style: {height: "400px", width: "800px"},
+            style: {
+                height: "400px",
+                width: "800px"
+            },
             virtualPaging: false,
             paging: false,
             overflowSize: 10,
-            pageSize: 15,
+            pageSize: 10,
             agGridOptions: {},
             columnDefaultOptions: {
                 width: 125
@@ -77,6 +81,7 @@ const FeatureGrid = React.createClass({
             zoom: null,
             enableZoomToFeature: true,
             srs: "EPSG:4326",
+            tools: [],
             toolbar: {
                 zoom: true,
                 exporter: true,
@@ -129,25 +134,24 @@ const FeatureGrid = React.createClass({
         let isPagingOrVirtual = (this.props.virtualPaging || this.props.paging);
 
         let tools = [];
-
         if (this.props.toolbar.zoom) {
-            tools.push(<button key="zoom" onClick={this.zoomToFeatures}><img src={img} width={16}/></button>);
+            tools.push(<Button key="zoom" onClick={this.zoomToFeatures}><Glyphicon glyph="search"/></Button>);
         }
 
         if (this.props.toolbar.exporter) {
-            tools.push(<button key="exporter" onClick={() => this.props.exportAction(this.api)}>
-                <I18N.Message msgId={"featuregrid.export"}/>
-            </button>);
+            tools.push(<Button key="exporter" onClick={() => this.props.exportAction(this.api)}>
+                <Glyphicon glyph="download"/><I18N.Message msgId={"featuregrid.export"}/>
+            </Button>);
         }
 
         if (this.props.toolbar.toolPanel) {
-            tools.push(<button key="toolPanel" onClick={() => { this.api.showToolPanel(!this.api.isToolPanelShowing()); }}>
-                <I18N.Message msgId={"featuregrid.tools"}/>
-            </button>);
+            tools.push(<Button key="toolPanel" onClick={() => { this.api.showToolPanel(!this.api.isToolPanelShowing()); }}>
+                <Glyphicon glyph="cog"/><I18N.Message msgId={"featuregrid.tools"}/>
+            </Button>);
         }
 
         if (this.props.toolbar.selectAll) {
-            let nOfFeatures = this.props.features.length;
+            let nOfFeatures = this.props.features && this.props.features.length;
             if (this.props.paging && this.api) {
                 nOfFeatures = 0;
                 this.api.forEachNode(() => {nOfFeatures++; });
@@ -158,7 +162,7 @@ const FeatureGrid = React.createClass({
             }else {
                 allSelected = !(this.props.select.length < nOfFeatures);
             }
-            tools.push(<button key="allrowsselection" onClick={() => {
+            tools.push(<Button key="allrowsselection" onClick={() => {
                 if (this.props.selectAll) {
                     if (!allSelected && this.api) {
                         this.api.deselectAll();
@@ -167,7 +171,7 @@ const FeatureGrid = React.createClass({
                 } else {
                     this.selectAllRows(!allSelected);
                 }
-            }}>
+            }}><Glyphicon glyph="check"/>
                 {
                     (!allSelected) ? (
                         <I18N.Message msgId={"featuregrid.selectall"}/>
@@ -175,44 +179,47 @@ const FeatureGrid = React.createClass({
                         <I18N.Message msgId={"featuregrid.deselectall"}/>
                     )
                 }
-            </button>);
+            </Button>);
         }
-
+        tools = [...tools, this.props.tools];
         return (
-            <div>
-            <div fluid={false} style={this.props.style} className="ag-fresh">
-                <AgGridReact
-                    virtualPaging={this.props.virtualPaging}
-                    columnDefs={this.setColumnDefs()}
-                    rowData={(!isPagingOrVirtual) ? this.props.features : null}
-                    datasource={(isPagingOrVirtual) ? this.setDataSource() : null}
-                    enableServerSideSorting={(isPagingOrVirtual)}
-                    // or provide props the old way with no binding
-                    onSelectionChanged={this.selectFeatures}
-                    rowSelection="multiple"
-                    enableColResize={true}
-                    enableSorting={(!isPagingOrVirtual)}
-                    toolPanelSuppressValues={true}
-                    toolPanelSuppressGroups={true}
-                    showToolPanel={false}
-                    rowDeselection={true}
-                    localeText={{
-                        page: LocaleUtils.getMessageById(this.context.messages, "featuregrid.pagination.page") || 'Page',
-                        of: LocaleUtils.getMessageById(this.context.messages, "featuregrid.pagination.of") || 'of',
-                        to: LocaleUtils.getMessageById(this.context.messages, "featuregrid.pagination.to") || 'to',
-                        more: LocaleUtils.getMessageById(this.context.messages, "featuregrid.pagination.more") || 'more',
-                        next: '>',
-                        last: '>|',
-                        first: '|<',
-                        previous: '<'}}
-                    onGridReady={this.onGridReady}
-                    {...this.props.agGridOptions}
-                />
-            </div>
-
-            <ButtonToolbar style={{marginTop: "5px", marginLeft: "0px"}}bsSize="sm">
-                {tools.map((tool) => tool)}
-            </ButtonToolbar>
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%"
+            }}>
+                <div fluid={false} style={this.props.style} className="ag-fresh">
+                    <AgGridReact
+                        virtualPaging={this.props.virtualPaging}
+                        columnDefs={this.setColumnDefs()}
+                        rowData={(!isPagingOrVirtual) ? this.props.features : null}
+                        datasource={(isPagingOrVirtual) ? this.setDataSource() : null}
+                        enableServerSideSorting={(isPagingOrVirtual)}
+                        // or provide props the old way with no binding
+                        onSelectionChanged={this.selectFeatures}
+                        rowSelection="multiple"
+                        enableColResize={true}
+                        enableSorting={(!isPagingOrVirtual)}
+                        toolPanelSuppressValues={true}
+                        toolPanelSuppressGroups={true}
+                        showToolPanel={false}
+                        rowDeselection={true}
+                        localeText={{
+                            page: LocaleUtils.getMessageById(this.context.messages, "featuregrid.pagination.page") || 'Page',
+                            of: LocaleUtils.getMessageById(this.context.messages, "featuregrid.pagination.of") || 'of',
+                            to: LocaleUtils.getMessageById(this.context.messages, "featuregrid.pagination.to") || 'to',
+                            more: LocaleUtils.getMessageById(this.context.messages, "featuregrid.pagination.more") || 'more',
+                            next: '>',
+                            last: '>|',
+                            first: '|<',
+                            previous: '<'}}
+                        onGridReady={this.onGridReady}
+                        {...this.props.agGridOptions}
+                    />
+                </div>
+                <ButtonToolbar className="featuregrid-tools" style={{marginTop: "5px", marginLeft: "0px", flex: "none"}} bsSize="sm">
+                    {tools.map((tool) => tool)}
+                </ButtonToolbar>
             </div>);
     },
     // If props.columnDefs is missing try to generate from features, add zoomTo as first column
@@ -231,7 +238,7 @@ const FeatureGrid = React.createClass({
         {
             onCellClicked: this.zoomToFeature,
             headerName: '',
-            cellRenderer: reactCellRendererFactory(ZoomToRenderer),
+            cellRenderer: reactCellRendererFactory(this.props.useIcons ? ZoomToFeatureIcon : ZoomToFeatureRenderer),
             suppressSorting: true,
             suppressMenu: true,
             pinned: true,

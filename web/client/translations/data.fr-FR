@@ -118,7 +118,7 @@
             "openInANewTab":"Ouvrir la carte",
             "deleteMap":"Supprimer la carte",
             "deleteMapMessage": "Voulez-vous supprimer cette carte?",
-            "editMapMetadata":"Modifier les metadonnées de la carte",
+            "editMapMetadata":"Modifier les propriétés de la carte",
             "mapTypes_combo": "Selectionner le viewer de carte: ",
             "maps_title": "Cartes",
             "locales_combo": "Langue:"
@@ -165,6 +165,12 @@
             }
         },
         "toc": {
+            "toggleLayerVisibility": "Activer / désactiver la visibilité du calque",
+            "displayLegendAndTools": "Afficher la légende et les outils",
+            "zoomToLayerExtent": "Zoomer sur l'étendue du calque",
+            "editLayerProperties": "Modifier les propriétés de la couche",
+            "searchFeatures": "Recherche sur ce calque ...",
+            "removeLayer": "Supprimer la couche",
             "loadingerror": "La couche n'a pas été chargée correctement"
         },
         "print":{
@@ -350,7 +356,6 @@
             "zoomIn": "This is the helptext for the ZoomIn",
             "zoomOut": "This is the helptext for the ZoomOut",
             "searchBar": "Tapez l'adresse à rechercher. p. ex.  '1st avenue, new york'. Vous pouvez aussi entrer des coordonnées au format suivant: 43.87,10.20",
-            "layerSwitcher": "This is the helptext for the LayerSwitcher",
             "metadataExplorer": "This is the helptext for the MetadataExplorer",
             "settingsPanel": "This is the helptext for the SettingsPanel",
             "gohome": "This is the helptext for Home",
@@ -481,6 +486,8 @@
         "usergroups": {
           "searchGroups": "rechercher des groupes...",
           "groups": "Groupes",
+          "nameLimit": "Le nom est limité à 255 caractères.",
+          "descLimit": "La description est limité à 255 caractères.",
           "editGroup": "Modifier",
           "deleteGroup": "Supprimer",
           "removeUser": "supprimer l'utilisateur",
@@ -548,6 +555,8 @@
             "catalogUrlPlaceholder": "Entrez catalogue URL...",
             "textSearchPlaceholder": "texte à rechercher...",
             "search": "Chercher",
+            "reset": "Effacer",
+            "options": "Options",
             "srs_not_allowed": "Ce service ne supporte pas le systéme de coordonnées géographique de la carte"
         },
         "uploader": {
@@ -555,7 +564,7 @@
             "type": "Type",
             "lastModified": "Last Modified",
             "filesize": "Size",
-            "beforeUpload": " Doing pre-upload operations... ",
+            "beforeUpload": "Doing pre-upload operations... ",
             "uploadingFiles": "Uploading Files...",
             "dropfile": "drop files here to upload",
             "dropfileImport": "drop here files to add it to this process"
@@ -687,6 +696,7 @@
             "export": "Exporter",
             "selectall": "Tout sélectionner",
             "deselectall": "Tout désélectionner",
+            "backtosearch": "Retour à la recherche",
             "pagination": {
                 "page": "Page",
                 "of":   "de",

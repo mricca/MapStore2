@@ -10,7 +10,10 @@ const {connect} = require('react-redux');
 const Sidebar = require('react-sidebar').default;
 const {createSelector} = require('reselect');
 const {changeLayerProperties, changeGroupProperties, toggleNode,
-       sortNode, showSettings, hideSettings, updateSettings, updateNode, removeNode, getLayerCapabilities} = require('../actions/layers');
+       sortNode, showSettings, hideSettings, updateSettings, updateNode, removeNode} = require('../actions/layers');
+
+const {getLayerCapabilities} = require('../actions/layerCapabilities');
+
 const {zoomToExtent} = require('../actions/map');
 const {toggleControl} = require('../actions/controls');
 
@@ -45,7 +48,7 @@ const {
     zoneChange
 } = require('../actions/queryform');
 
-const {query} = require('../actions/wfsquery');
+const {createQuery} = require('../actions/wfsquery');
 
 const {
     changeDrawingStatus,
@@ -101,7 +104,7 @@ const SmartQueryForm = connect((state) => {
             zoneChange
         }, dispatch),
         queryToolbarActions: bindActionCreators({
-            onQuery: query,
+            onQuery: createQuery,
             onReset: reset,
             onChangeDrawingStatus: changeDrawingStatus
         }, dispatch)

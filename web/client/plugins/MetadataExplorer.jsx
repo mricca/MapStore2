@@ -1,5 +1,5 @@
 /**
- * Copyright 2016, GeoSolutions Sas.
+ * Copyright 2017, GeoSolutions Sas.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -11,8 +11,7 @@ const {connect} = require('react-redux');
 const assign = require('object-assign');
 const {createSelector} = require("reselect");
 const {Glyphicon, Panel} = require('react-bootstrap');
-const {textSearch, changeCatalogFormat, addLayerError, catalogReset} = require("../actions/catalog");
-const {addLayer} = require("../actions/layers");
+const {textSearch, changeCatalogFormat, addLayer, addLayerError, resetCatalog} = require("../actions/catalog");
 const {zoomToExtent} = require("../actions/map");
 const {toggleControl} = require("../actions/controls");
 const Message = require("../components/I18N/Message");
@@ -32,7 +31,7 @@ const catalogSelector = createSelector([
 const catalogClose = () => {
     return (dispatch) => {
         dispatch(toggleControl('metadataexplorer'));
-        dispatch(catalogReset());
+        dispatch(resetCatalog());
     };
 };
 
@@ -96,7 +95,7 @@ const MetadataExplorerComponent = React.createClass({
 });
 const MetadataExplorerPlugin = connect((state) => ({
     searchOptions: state.catalog && state.catalog.searchOptions,
-    formats: state.catalog && state.catalog.supportedFormats || [{name: 'csw', label: 'CSW'}, {name: 'wms', label: 'WMS'}],
+    formats: state.catalog && state.catalog.supportedFormats || [{name: 'csw', label: 'CSW'}, {name: 'wms', label: 'WMS'}, {name: "wmts", label: "WMTS"}],
     result: state.catalog && state.catalog.result,
     loadingError: state.catalog && state.catalog.loadingError,
     layerError: state.catalog && state.catalog.layerError,

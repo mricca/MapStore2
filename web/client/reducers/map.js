@@ -7,8 +7,9 @@
  */
 
 var {CHANGE_MAP_VIEW, CHANGE_MOUSE_POINTER,
-    CHANGE_ZOOM_LVL, CHANGE_MAP_CRS, ZOOM_TO_EXTENT, PAN_TO, CHANGE_MAP_STYLE,
-    CHANGE_ROTATION} = require('../actions/map');
+    CHANGE_ZOOM_LVL, CHANGE_MAP_CRS, CHANGE_MAP_SCALES, ZOOM_TO_EXTENT, PAN_TO,
+    CHANGE_MAP_STYLE, CHANGE_ROTATION} = require('../actions/map');
+const {isArray} = require('lodash');
 
 
 var assign = require('object-assign');
@@ -33,19 +34,66 @@ function mapConfig(state = null, action) {
             return assign({}, state, {
                 projection: action.crs
             });
+        case CHANGE_MAP_SCALES:
+            if (action.scales) {
+                const dpi = state && state.mapOptions && state.mapOptions.view && state.mapOptions.view.DPI || null;
+                const resolutions = MapUtils.getResolutionsForScales(action.scales, (state && state.projection) || "EPSG:4326", dpi);
+                // add or update mapOptions.view.resolutions
+                return assign({}, state, {
+                    mapOptions: assign({}, state && state.mapOptions,
+                        {
+                            view: assign({}, state && state.mapOptions && state.mapOptions.view, {
+                                resolutions: resolutions
+                            })
+                        })
+                });
+            } else if (state && state.mapOptions && state.mapOptions.view && state.mapOptions.view && state.mapOptions.view.resolutions) {
+                // TODO: this block is removing empty objects from the state, check if it really needed
+                // deeper clone
+                let newState = assign({}, state);
+                newState.mapOptions = assign({}, newState.mapOptions);
+                newState.mapOptions.view = assign({}, newState.mapOptions.view);
+                // remove resolutions
+                delete newState.mapOptions.view.resolutions;
+                // cleanup state
+                if (Object.keys(newState.mapOptions.view).length === 0) {
+                    delete newState.mapOptions.view;
+                }
+                if (Object.keys(newState.mapOptions).length === 0) {
+                    delete newState.mapOptions;
+                }
+                return newState;
+            }
+            return state;
         case ZOOM_TO_EXTENT: {
             let zoom = 0;
-            let bounds = CoordinatesUtils.reprojectBbox(action.extent, action.crs, state.bbox && state.bbox.crs || "EPSG:4326");
-            let wgs84BBounds = CoordinatesUtils.reprojectBbox(action.extent, action.crs, "EPSG:4326");
-            if (bounds && wgs84BBounds) {
+            let extent = [];
+            if (isArray(action.extent)) {
+                extent = action.extent.map((val) => {
+                    // MapUtils.getCenterForExtent returns an array of strings sometimes (catalog)
+                    if (typeof val === 'string' || val instanceof String) {
+                        return Number(val);
+                    }
+                    return val;
+                });
+            } else {
+                extent = Object.keys(action.extent).map(v => {
+                    if (typeof action.extent[v] === 'string' || action.extent[v] instanceof String) {
+                        return Number(action.extent[v]);
+                    }
+                    return action.extent[v];
+                });
+            }
+            let bounds = CoordinatesUtils.reprojectBbox(extent, action.crs, state.bbox && state.bbox.crs || "EPSG:4326");
+            if (bounds) {
                 // center by the max. extent defined in the map's config
-                let center = MapUtils.getCenterForExtent(wgs84BBounds, "EPSG:4326");
+                let center = CoordinatesUtils.reproject(MapUtils.getCenterForExtent(extent, action.crs), action.crs, 'EPSG:4326');
                 // workaround to get zoom 0 for -180 -90... - TODO do it better
-                let full = action.crs === "EPSG:4326" && action.extent && action.extent[0] <= -180 && action.extent[1] <= -90 && action.extent[2] >= 180 && action.extent[3] >= 90;
+                let full = action.crs === "EPSG:4326" && extent && extent[0] <= -180 && extent[1] <= -90 && extent[2] >= 180 && extent[3] >= 90;
                 if ( full ) {
-                    zoom = 2;
+                    zoom = 1;
                 } else {
-                    let mapBBounds = CoordinatesUtils.reprojectBbox(action.extent, action.crs, state.projection || "EPSG:4326");
+                    let mapBBounds = CoordinatesUtils.reprojectBbox(extent, action.crs, state.projection || "EPSG:4326");
                     // NOTE: STATE should contain size !!!
                     zoom = MapUtils.getZoomForExtent(mapBBounds, state.size, 0, 21, null);
                 }

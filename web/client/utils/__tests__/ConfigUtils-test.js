@@ -268,4 +268,26 @@ describe('ConfigUtils', () => {
         expect(layer.url[0]).toBe(ConfigUtils.getConfigProp('proxyUrl'));
         expect(layer.url[1]).toBe(ConfigUtils.getConfigProp('proxyUrl'));
     });
+
+    it('proxied url', () => {
+        expect(ConfigUtils.getProxiedUrl('http://remote.url')).toBe(ConfigUtils.getConfigProp('proxyUrl') + encodeURIComponent('http://remote.url'));
+        expect(ConfigUtils.getProxiedUrl('http://remote.cors', {
+            proxyUrl: {
+                url: 'myproxy',
+                useCORS: ['http://remote.cors']
+            }
+        })).toBe('http://remote.cors');
+    });
+
+    it('config prop', () => {
+        ConfigUtils.setConfigProp('testProperty', 'testValue');
+        expect(ConfigUtils.getConfigProp('testProperty')).toBe('testValue');
+    });
+
+    it('remove config prop', () => {
+        ConfigUtils.setConfigProp('testProperty', 'testValue');
+        expect(ConfigUtils.getConfigProp('testProperty')).toBe('testValue');
+        ConfigUtils.removeConfigProp('testProperty');
+        expect(ConfigUtils.getConfigProp('testProperty')).toNotExist();
+    });
 });
