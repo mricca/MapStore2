@@ -46,6 +46,7 @@
         "settings": "Impostazioni",
         "help": "Aiuto",
         "gohome": "Torna alla home",
+        "searchdate-tooltip": "Apri il calendario",
         "back": "Torna all'importer",
         "printbutton": "Stampa",
         "noresultfound": "Nessun Risultato Trovato",

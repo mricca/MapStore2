@@ -47,6 +47,7 @@
         "settings": "Réglages",
         "help": "Aide",
         "gohome": "Retour",
+        "searchdate-tooltip": "Apri il calendario",
         "back": "Back to the Importer",
         "printbutton": "Imprimer",
         "noresultfound": "Aucun résultat trouvé",
