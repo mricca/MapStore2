@@ -22,7 +22,7 @@ const Section = require('./drawer/Section');
 const {partialRight} = require('lodash');
 
 const Menu = connect((state) => ({
-    show: state.controls.drawer && state.controls.drawer.enabled,
+    show: state.controls && state.controls.drawer && state.controls.drawer.active,
     activeKey: state.controls.drawer && state.controls.drawer.menu,
     width: (state.controls.queryPanel && state.controls.queryPanel.enabled) ? 700 : 300
 }), {
