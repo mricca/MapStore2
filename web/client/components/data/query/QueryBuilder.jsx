@@ -21,6 +21,8 @@ const QueryBuilder = React.createClass({
         featureTypeConfigUrl: React.PropTypes.string,
         useMapProjection: React.PropTypes.bool,
         attributes: React.PropTypes.array,
+        featureTypeError: React.PropTypes.string,
+        featureTypeErrorText: React.PropTypes.node,
         groupLevels: React.PropTypes.number,
         filterFields: React.PropTypes.array,
         groupFields: React.PropTypes.array,
@@ -56,6 +58,7 @@ const QueryBuilder = React.createClass({
             groupFields: [],
             filterFields: [],
             attributes: [],
+            featureTypeError: "",
             spatialField: {},
             removeButtonIcon: "glyphicon glyphicon-minus",
             addButtonIcon: "glyphicon glyphicon-plus",
@@ -98,6 +101,12 @@ const QueryBuilder = React.createClass({
             }
         };
     },
+    componentDidMount() {
+        if (this.props.featureTypeConfigUrl && this.props.attributes.length < 1) {
+            this.props.attributeFilterActions.onLoadFeatureTypeConfig(
+                this.props.featureTypeConfigUrl, this.props.params);
+        }
+    },
     componentWillReceiveProps(props) {
         let url = props.featureTypeConfigUrl;
         let params = props.params !== this.props.params ? props.params : this.props.params;
@@ -105,32 +114,12 @@ const QueryBuilder = React.createClass({
             this.props.attributeFilterActions.onLoadFeatureTypeConfig(url, params);
         }
     },
-    componentDidMount() {
-        if (this.props.featureTypeConfigUrl && this.props.attributes.length < 1) {
-            this.props.attributeFilterActions.onLoadFeatureTypeConfig(
-                this.props.featureTypeConfigUrl, this.props.params);
-        }
-    },
     render() {
+        if (this.props.featureTypeError !== "") {
+            return (<div style={{margin: "0 auto", "text-align": "center"}}>{this.props.featureTypeErrorText}</div>);
+        }
         return this.props.attributes.length > 0 ? (
             <div id="queryFormPanel">
-                <div className="querypanel">
-                    <GroupField
-                        attributes={this.props.attributes}
-                        groupLevels={this.props.groupLevels}
-                        filterFields={this.props.filterFields}
-                        groupFields={this.props.groupFields}
-                        removeButtonIcon={this.props.removeButtonIcon}
-                        addButtonIcon={this.props.addButtonIcon}
-                        attributePanelExpanded={this.props.attributePanelExpanded}
-                        actions={this.props.attributeFilterActions}/>
-                    <SpatialFilter
-                        useMapProjection={this.props.useMapProjection}
-                        spatialField={this.props.spatialField}
-                        spatialPanelExpanded={this.props.spatialPanelExpanded}
-                        showDetailsPanel={this.props.showDetailsPanel}
-                        actions={this.props.spatialFilterActions}/>
-                </div>
                 <QueryToolbar
                     params={this.props.params}
                     filterFields={this.props.filterFields}
@@ -148,6 +137,23 @@ const QueryBuilder = React.createClass({
                     sortOptions={this.props.sortOptions}
                     hits={this.props.hits}
                     />
+                <div className="querypanel">
+                    <GroupField
+                        attributes={this.props.attributes}
+                        groupLevels={this.props.groupLevels}
+                        filterFields={this.props.filterFields}
+                        groupFields={this.props.groupFields}
+                        removeButtonIcon={this.props.removeButtonIcon}
+                        addButtonIcon={this.props.addButtonIcon}
+                        attributePanelExpanded={this.props.attributePanelExpanded}
+                        actions={this.props.attributeFilterActions}/>
+                    <SpatialFilter
+                        useMapProjection={this.props.useMapProjection}
+                        spatialField={this.props.spatialField}
+                        spatialPanelExpanded={this.props.spatialPanelExpanded}
+                        showDetailsPanel={this.props.showDetailsPanel}
+                        actions={this.props.spatialFilterActions}/>
+                </div>
             </div>
         ) : (<div style={{margin: "0 auto", width: "60px"}}><Spinner spinnerName="three-bounce"/></div>);
     }
