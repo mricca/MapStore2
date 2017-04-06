@@ -74,7 +74,7 @@ module.exports = React.createClass({
                           decimals: 1
                       })
                     }}
-                    tooltips={false}
+                    tooltips={!this.props.elevations.showChart}
                     onChange={(value) => {
                         elevationName[this.props.elevations.name] = value;
                         this.props.onChange("params", Object.assign({}, elevationName));
@@ -90,7 +90,7 @@ module.exports = React.createClass({
                     id="mapstore-elevation-label"
                     key="elevation-label"
                     className="control-label"
-                    style={this.props.elevations.showChart ? {marginBottom: "10px"} : {}}>
+                    style={this.props.elevations.showChart ? {marginBottom: "10px"} : {marginBottom: "90px"}}>
                     {this.props.elevationText}: ({this.props.elevations.units})
                 </label>
                 {this.renderElevationsChart(elevations)}
