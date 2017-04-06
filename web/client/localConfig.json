@@ -12,6 +12,15 @@
     "ignoreMobileCss": true,
     "useAuthenticationRules": true,
     "themePrefix": "ms2",
+    "defaultMapOptions": {
+      "cesium": {
+          "terrainProvider": {
+              "type": "cesium",
+              "url": "https://assets.agi.com/stk-terrain/world",
+              "requestVertexNormals": true
+          }
+      }
+    },
     "authenticationRules": [{
         "urlPattern": ".*geostore.*",
         "method": "basic"
@@ -89,6 +98,13 @@
                 "override": {
                     "Toolbar": {
                         "alwaysVisible": true
+                    }
+                }
+            }, {
+                "name": "FullScreen",
+                "override": {
+                    "Toolbar": {
+                        "alwaysVisible": false
                     }
                 }
             }, "Login",
@@ -186,16 +202,15 @@
                     }
                 }
             },
-            "OmniBar", "Login", "Save", "SaveAs", "BurgerMenu", "Expander", "Undo", "Redo"
+            "OmniBar", "Login", "Save", "SaveAs", "BurgerMenu", "Expander", "Undo", "Redo", "FullScreen"
         ],
         "embedded": [{
                 "name": "Map",
                 "cfg": {
                     "tools": ["locate"]
                 }
-            }, "Help", "DrawerMenu", {
+            }, "DrawerMenu", {
                 "name": "Identify",
-                "showIn": ["Settings"],
                 "cfg": {
                     "style": {
                         "position": "absolute",
@@ -215,6 +230,13 @@
                     "bodyClass": "mobile-feature-info"
                 }
             }, {
+                "name": "ZoomAll",
+                "override": {
+                    "Toolbar": {
+                        "alwaysVisible": true
+                    }
+                }
+            }, {
                 "name": "Locate",
                 "override": {
                     "Toolbar": {
@@ -225,11 +247,6 @@
                 "name": "Settings",
                 "cfg": {
                     "wrap": true
-                }
-            }, "About", {
-                "name": "MousePosition",
-                "cfg": {
-                    "id": "mapstore-mouseposition-mobile"
                 }
             }, {
                 "name": "Search",
@@ -243,14 +260,6 @@
                     "id": "navigationBar"
                 }
             }, {
-                "name": "Toolbar",
-                "id": "IdentifyBar",
-                "stateSelector": "identify",
-                "cfg": {
-                    "id": "identifyBar"
-                },
-                "isDefault": false
-            }, {
                 "name": "MapLoading",
                 "override": {
                     "Toolbar": {
@@ -258,7 +267,7 @@
                     }
                 }
             },
-            "OmniBar", "BurgerMenu"
+            "OmniBar"
         ],
         "common": [{
             "name": "OmniBar",

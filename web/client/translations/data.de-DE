@@ -67,7 +67,7 @@
         "permissions": "Genehmigungen",
         "home":{
             "open": "Öffnen",
-            "description": "MapStore 2 wurde entwickelt, um auf einfache und intuitive Weise Karten und Mashups zu erstellen, zu speichern und zu teilen die auf Inhalten von bekannten Quellen wie Google Maps und OpenStreetMap oder von Diensten die auf offenen Protokollen wie OGC WMS, WFS, WMTS or TMS und so weiter basieren.<br/>Besuche die <a href=\"http://geosolutions-it.github.io/MapStore2/\">Homepage</a> für mehr Details.",
+            "description": "MapStore 2 wurde entwickelt, um auf einfache und intuitive Weise Karten und Mashups zu erstellen, zu speichern und zu teilen die auf Inhalten von bekannten Quellen wie Google Maps und OpenStreetMap oder von Diensten die auf offenen Protokollen wie OGC WMS, WFS, WMTS or TMS und so weiter basieren.<br/>Besuche die <a href=\"/mapstore/docs/\">Homepage</a> für mehr Details.",
             "Applications": "Anwendungen",
             "Examples": "Beispiele",
             "LinkedinGroup": "Mapstore Linkedin Gruppe",
@@ -355,6 +355,10 @@
             "zoomOutTooltip": "Zoom verringern",
             "zoomAllTooltip": "Zoom auf maximale Ausdehnung"
         },
+        "fullscreen": {
+            "tooltipActivate": "Umschalten auf Vollbild",
+            "tooltipDeactivate": "Vollbild verlassen"
+        },
         "helptexts": {
             "scaleBox": "Das ist die Hilfe für die ScaleBox",
             "zoomToMaxExtentButton": "Das ist die Hilfe für den ZoomToMaxExtentButton",
@@ -391,6 +395,7 @@
                 "header": "Finde im Datensatz",
                 "dataset_header": "Datensatz"
             },
+            "emptyfilter": "Kein Filtersatz. Die Suche nach dem Timeout, wenn die Paginierung vom Server nicht unterstützt wird.",
             "attributefilter":{
                 "add_condition": " Füge Bedingung hinzu",
                 "add_group": " Füge Gruppe hinzu",
@@ -518,6 +523,10 @@
             "socialIntro": "In deinem bevorzugten sozialen Netzwerk",
             "directLinkTitle": "Über einen direkten Link",
             "embeddedLinkTitle": "Über einen eingebetteten Code",
+            "apiLinkTitle": "API verwenden",
+            "social": "Social",
+            "direct": "Link",
+            "code": "Embed",
             "QRCodeLinkTitle": "QR code",
             "msgCopiedUrl":"Kopiert",
             "msgToCopyUrl":"Klicke um zu kopieren"
@@ -816,6 +825,10 @@
             "zoomOutButton": {
                 "title": "Zoom Out",
                 "text": "Click to reduce the map"
+            },
+            "fullscreen": {
+                "title": "Vollbild",
+                "text": "Umschalten auf Vollbild"
             },
             "identifyButton": {
                 "title": "Info",

@@ -19,10 +19,10 @@ const Dialog = require('../misc/Dialog');
 const ShareSocials = require('./ShareSocials');
 const ShareLink = require('./ShareLink');
 const ShareEmbed = require('./ShareEmbed');
+const ShareApi = require('./ShareApi');
 const ShareQRCode = require('./ShareQRCode');
-const {Glyphicon} = require('react-bootstrap');
+const {Glyphicon, Tabs, Tab} = require('react-bootstrap');
 const Message = require('../../components/I18N/Message');
-const Url = require('url');
 
 let SharePanel = React.createClass({
 
@@ -30,6 +30,9 @@ let SharePanel = React.createClass({
         isVisible: React.PropTypes.bool,
         title: React.PropTypes.node,
         shareUrl: React.PropTypes.string,
+        shareEmbeddedUrl: React.PropTypes.string,
+        shareApiUrl: React.PropTypes.string,
+        shareConfigUrl: React.PropTypes.string,
         onClose: React.PropTypes.func,
         getCount: React.PropTypes.func,
         closeGlyph: React.PropTypes.string
@@ -44,19 +47,20 @@ let SharePanel = React.createClass({
     render() {
         // ************************ CHANGE URL PARAMATER FOR EMBED CODE ****************************
         /* if the property shareUrl is not defined it takes the url from location.href */
-        let shareUrl = this.props.shareUrl || location.href;
-        /* the sharing url is parsed in order to check the query parameters from the complete url */
-        let urlParsedObj = Url.parse(shareUrl, true);
-        /* if not null, the search attribute will prevale over the query attribute hiding the query
-           one, so is necessary to nullify it */
-        urlParsedObj.search = null;
-        if (urlParsedObj && urlParsedObj.query) {
-            urlParsedObj.query.mode = "embedded";
-        }
-        /* in order to obtain the complete url is necessary to format the obj into a string */
-        let urlformatted = Url.format(urlParsedObj);
-        /* shareEmbeddedUrl is the url used for embedded part */
-        let shareEmbeddedUrl = urlformatted;
+        const shareUrl = this.props.shareUrl || location.href;
+        const shareEmbeddedUrl = this.props.shareEmbeddedUrl || this.props.shareUrl || location.href;
+        const shareApiUrl = this.props.shareApiUrl || this.props.shareUrl || location.href;
+        const social = <ShareSocials shareUrl={shareUrl} getCount={this.props.getCount}/>;
+        const direct = (<div><ShareLink shareUrl={shareUrl}/><ShareQRCode shareUrl={shareUrl}/></div>);
+        const code = (<div><ShareEmbed shareUrl={shareEmbeddedUrl}/>
+        <ShareApi shareUrl={shareApiUrl} shareConfigUrl={this.props.shareConfigUrl}/></div>);
+
+        const tabs = (<Tabs defaultActiveKey={1} id="sharePanel-tabs">
+            <Tab eventKey={1} title={<Message msgId="share.direct" />}>{direct}</Tab>
+            <Tab eventKey={2} title={<Message msgId="share.social" />}>{social}</Tab>
+            <Tab eventKey={3} title={<Message msgId="share.code" />}>{code}</Tab>
+          </Tabs>);
+
         let sharePanel = (
             <Dialog id="share-panel-dialog" className="modal-dialog modal-content share-win">
                 <span role="header">
@@ -68,10 +72,7 @@ let SharePanel = React.createClass({
                     </button>
                 </span>
                 <div role="body" className="share-panels">
-                    <ShareSocials shareUrl={shareUrl} getCount={this.props.getCount}/>
-                    <ShareLink shareUrl={shareUrl}/>
-                    <ShareEmbed shareUrl={shareEmbeddedUrl}/>
-                    <ShareQRCode shareUrl={shareUrl}/>
+                    {tabs}
                 </div>
             </Dialog>);
 
