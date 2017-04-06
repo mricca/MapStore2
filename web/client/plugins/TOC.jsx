@@ -168,7 +168,8 @@ const LayerTree = React.createClass({
         activateQueryTool: React.PropTypes.bool,
         activateSettingsTool: React.PropTypes.bool,
         visibilityCheckType: React.PropTypes.string,
-        settingsOptions: React.PropTypes.object
+        settingsOptions: React.PropTypes.object,
+        chartStyle: React.PropTypes.object
     },
     getDefaultProps() {
         return {
@@ -226,8 +227,10 @@ const LayerTree = React.createClass({
                             activateQueryTool={this.props.activateQueryTool}
                             activateSettingsTool={this.props.activateSettingsTool}
                             retrieveLayerData={this.props.retrieveLayerData}
+                            chartStyle={this.props.chartStyle}
                             settingsText={<Message msgId="layerProperties.windowTitle"/>}
                             opacityText={<Message msgId="opacity"/>}
+                            elevationText={<Message msgId="elevation"/>}
                             saveText={<Message msgId="save"/>}
                             closeText={<Message msgId="close"/>}
                             groups={this.props.groups}/>);
